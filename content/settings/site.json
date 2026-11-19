@@ -6,19 +6,17 @@
   "honorific": "dr.",
   "job_title": "Medical doctor and clinical neuroscience researcher",
   "affiliation_label": "Affiliations",
-  "affiliation": "MCS (AI), [Universitas Gadjah Mada](https://ugm.ac.id)",
+  "affiliation": "Master of Computer Science in Artificial Intelligence, [Universitas Gadjah Mada](https://ugm.ac.id)",
   "location": "Yogyakarta, Indonesia",
-  "description": "Muhana Fawwazy Ilyas is a medical doctor and AI researcher working on clinical neuroscience, neuro-oncology outcomes, epilepsy, traumatic brain injury, dementia and medical AI.",
+  "description": "Muhana Fawwazy Ilyas is a medical doctor and medical AI researcher working on clinical neuroscience, neuropsychiatry, other CNS conditions, ageing population, and general medicine.",
   "avatar": "/uploads/images/avatar.png",
   "avatar_alt": "Portrait of Muhana Fawwazy Ilyas",
-  "bio": "I am a medical doctor trained at [Universitas Sebelas Maret](https://uns.ac.id) and am completing a Master of Computer Science in Artificial Intelligence at [Universitas Gadjah Mada](https://ugm.ac.id). My work sits between clinical neuroscience and machine learning.\n\nI study how people recover, or fail to recover, after brain tumours, epilepsy, traumatic brain injury and dementia, and I build interpretable models that make those outcomes easier to predict. I am currently developing the [Atlas of Psychological Outcomes in Neuro-Oncology (APONO)](/atlas), which maps postoperative cognitive and psychological outcomes onto tumour location.\n\nI am also a research assistant in the Functional Neurosurgery Division of the National Brain Center Hospital, Jakarta, and the founder of Riset Inklusif, a platform that teaches clinical research methods to doctors and medical students in Indonesia.",
+  "bio": "I am a medical doctor trained at [Universitas Sebelas Maret](https://uns.ac.id) and am completing a Master of Computer Science in Artificial Intelligence at [Universitas Gadjah Mada](https://ugm.ac.id). My work sits between clinical neuroscience and machine learning.\n\nI study how people recover, or fail to recover, after brain tumours, epilepsy, traumatic brain injury and dementia, and I build interpretable models that make those outcomes easier to predict. I am currently developing the [Atlas of Psychological Outcomes in Neuro-Oncology (APONO)](/atlas), which maps postoperative cognitive and psychological outcomes onto tumour location.\n\nI am also the founder of Riset Inklusif, a platform that teaches clinical research methods to doctors and medical students in Indonesia. I also actively serve as a research collaborator with several leading institutions, including the Master of Public Health program at Universitas Sebelas Maret, the National Brain Center Hospital of Indonesia, Soeharso Orthopaedic Hospital, and UNS Teaching Hospital in Indonesia.",
   "interests": [
     "Clinical neuroscience and neuropsychiatry",
-    "Neuro-oncology outcomes",
-    "Epilepsy and neuromodulation",
-    "Traumatic brain injury",
-    "Dementia and healthy ageing",
-    "Medical AI and evidence synthesis"
+    "Ageing populations",
+    "Medical artificial intelligence",
+    "Evidence synthesis (meta-analysis)"
   ],
   "personal": "Outside research, I train for long-distance running and enjoy board games.",
   "news_count": 6,
@@ -30,7 +28,8 @@
     "MF Ilyas",
     "Ilyas MF",
     "Ilyas, M. F.",
-    "Ilyas, Muhana Fawwazy"
+    "Ilyas, Muhana Fawwazy",
+    "Ilyas Fawwazy"
   ],
   "socials": [
     {
@@ -106,7 +105,7 @@
   ],
   "works_for": "National Brain Center Hospital Prof. Dr. dr. Mahar Mardjono, Jakarta",
   "social_image": "/og-default.png",
-  "show_altmetric": false,
-  "show_dimensions": false,
-  "header_font": "system"
+  "header_font": "system",
+  "show_altmetric": true,
+  "show_dimensions": true
 }
