@@ -1,0 +1,28 @@
+---
+// Project detail page: full write-up written in the admin panel's rich text editor.
+import Base from '../../layouts/Base.astro';
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+
+export async function getStaticPaths() {
+  const projects = await getCollection('projects', (p) => !p.data.hidden);
+  return projects.map((project) => ({ params: { id: project.id }, props: { project } }));
+}
+const { project } = Astro.props as { project: CollectionEntry<'projects'> };
+const { Content } = await render(project);
+const d = project.data;
+const period = [d.start, d.end ?? (d.status === 'active' ? 'present' : undefined)].filter(Boolean).join(' to ');
+---
+<Base title={d.title} description={d.summary} image={d.thumbnail ?? undefined} katex>
+  <p class="eyebrow">{d.status}{period && ` · ${period}`}</p>
+  <h1 class="page-title">{d.title}</h1>
+  <p class="page-intro" style="margin-bottom:1.5rem">{d.summary}</p>
+  {d.thumbnail && <img class="post-cover" src={d.thumbnail} alt={d.thumbnail_alt ?? ''} />}
+  <div class="prose"><Content /></div>
+  {d.links.length > 0 && (
+    <p class="pub-actions" style="margin-top:2rem">
+      {d.links.map((l) => <a href={l.url} target="_blank" rel="noopener">{l.label}</a>)}
+    </p>
+  )}
+  {d.tags.length > 0 && <ul class="tags">{d.tags.map((t) => <li>{t}</li>)}</ul>}
+  <p class="section"><a href="/projects/">&larr; All projects</a></p>
+</Base>

@@ -1,0 +1,31 @@
+# Adds new papers from your ORCID record to the Publications page.
+# Run it from GitHub: Actions > "Import publications from ORCID" > Run workflow.
+# It also runs automatically on the 1st of every month.
+name: Import publications from ORCID
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '17 3 1 * *'
+
+permissions:
+  contents: write
+
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: node scripts/import-orcid.mjs
+        env:
+          CROSSREF_MAILTO: ${{ vars.CROSSREF_MAILTO }}
+      - name: Commit new publications (if any)
+        run: |
+          git config user.name "orcid-import-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add content/publications
+          git diff --cached --quiet || git commit -m "Import new publications from ORCID"
+          git push

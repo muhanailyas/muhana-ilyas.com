@@ -1,0 +1,25 @@
+---
+// Repositories: entered by hand in the admin panel (no GitHub API needed).
+import Base from '../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+import { SITE, byOrder } from '../lib/site';
+
+const repos = (await getCollection('repositories', (r) => !r.data.hidden)).sort((a, b) => byOrder(a, b) || a.data.name.localeCompare(b.data.name));
+const gh = SITE.socials.find((s) => /github/i.test(s.label));
+---
+<Base title="Repositories" description="Open-source code and research software.">
+  <h1 class="page-title">Repositories</h1>
+  <p class="page-intro">Code for my research and coursework{gh && <>, all on <a href={gh.url}>GitHub</a></>}.</p>
+  <ul class="repo-grid">
+    {repos.map((r) => (
+      <li class="repo">
+        <h2><a href={r.data.url} target="_blank" rel="noopener">{r.data.name}</a></h2>
+        <p>{r.data.description}</p>
+        <p class="meta">
+          {[r.data.language, typeof r.data.stars === 'number' && r.data.stars > 0 ? `${r.data.stars} star${r.data.stars === 1 ? '' : 's'}` : null].filter(Boolean).join(' · ')}
+          {r.data.demo && <> &middot; <a href={r.data.demo} target="_blank" rel="noopener">Live demo</a></>}
+        </p>
+      </li>
+    ))}
+  </ul>
+</Base>

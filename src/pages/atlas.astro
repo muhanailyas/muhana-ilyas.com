@@ -1,0 +1,35 @@
+---
+// Atlas (APONO). Controlled by content/atlas/atlas.md:
+//   status: coming-soon  -> quiet placeholder with an optional "notify me" email link
+//   status: live         -> description, embedded atlas app and/or a launch button
+import Base from '../layouts/Base.astro';
+import { getCollection, render } from 'astro:content';
+import Email from '../components/Email.astro';
+
+const [atlas] = await getCollection('atlas');
+const d = atlas.data;
+const { Content } = await render(atlas);
+const notifySubject = `Notify me when ${d.short_title ?? 'the atlas'} launches`;
+---
+<Base title={d.short_title ? `${d.short_title}: ${d.title}` : d.title} description={d.tagline}>
+  {d.status === 'coming-soon' ? (
+    <section class="atlas-soon">
+      {d.short_title && <p class="eyebrow">{d.short_title}</p>}
+      <h1>{d.title}</h1>
+      {d.tagline && <p class="tagline">{d.tagline}</p>}
+      <div class="mark" aria-hidden="true"></div>
+      <p class="soon">{d.coming_soon_message ?? 'Coming soon.'}</p>
+      {d.notify_email && <p><Email address={d.notify_email} label={`${d.notify_text ?? 'Get notified'} \u2192`} subject={notifySubject} /></p>}
+    </section>
+  ) : (
+    <>
+      {d.short_title && <p class="eyebrow">{d.short_title}</p>}
+      <h1 class="page-title">{d.title}</h1>
+      {d.tagline && <p class="page-intro">{d.tagline}</p>}
+      <div class="prose"><Content /></div>
+      {d.launch_url && <p><a class="btn" href={d.launch_url} target="_blank" rel="noopener">Open the atlas</a></p>}
+      {d.embed_url && <iframe class="atlas-frame" src={d.embed_url} title={d.title} style={`height:${d.embed_height ?? 760}px`} loading="lazy" allow="fullscreen"></iframe>}
+      {d.image && !d.embed_url && <img src={d.image} alt={d.title} />}
+    </>
+  )}
+</Base>

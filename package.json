@@ -1,0 +1,23 @@
+{
+  "name": "muhana-ilyas-site",
+  "type": "module",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Personal academic website of Muhana Fawwazy Ilyas (Astro + Sveltia CMS).",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "import:orcid": "node scripts/import-orcid.mjs"
+  },
+  "dependencies": {
+    "@astrojs/markdown-remark": "^7.3.10",
+    "@astrojs/rss": "^4.0.19",
+    "@astrojs/sitemap": "^3.7.6",
+    "astro": "^7.4.13",
+    "katex": "^0.19.1",
+    "marked": "^18.2.1",
+    "rehype-katex": "^7.0.1",
+    "remark-math": "^6.0.0"
+  }
+}

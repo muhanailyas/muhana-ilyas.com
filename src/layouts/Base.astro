@@ -1,0 +1,53 @@
+---
+// The frame every page uses: <head>, header, main column, footer.
+import '../styles/global.css';
+import { SITE } from '../lib/site';
+import Seo from '../components/Seo.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  type?: 'website' | 'article' | 'profile';
+  noindex?: boolean;
+  katex?: boolean;
+}
+const { katex = false, ...seo } = Astro.props;
+// Neue Montreal for the header, only once its font files are uploaded and the option is on in Settings.
+const neueMontreal = (SITE as any).header_font === 'neue-montreal';
+---
+<!doctype html>
+<html lang="en" class={neueMontreal ? 'nm' : undefined}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    {katex && <link rel="stylesheet" href="/katex/katex.min.css" />}
+    {neueMontreal && <link rel="stylesheet" href="/fonts/neue-montreal.css" />}
+    <!-- Apply the saved or system theme before the page paints, so there is no flash. -->
+    <script is:inline>
+      (function () {
+        var t = null;
+        try { t = localStorage.getItem('theme'); } catch (e) {}
+        if (!t) t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        document.documentElement.dataset.theme = t;
+      })();
+    </script>
+    <Seo {...seo}><slot name="head" /></Seo>
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+    <Header />
+    <main id="main">
+      <div class="wrap">
+        <slot />
+      </div>
+    </main>
+    <Footer />
+  </body>
+</html>

@@ -1,0 +1,32 @@
+---
+// Projects: thumbnail, title, status, summary and tags; each links to its own page.
+import Base from '../../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+import { byOrder } from '../../lib/site';
+
+const rank = { active: 0, planned: 1, paused: 2, completed: 3 } as const;
+const projects = (await getCollection('projects', (p) => !p.data.hidden)).sort(
+  (a, b) => byOrder(a, b) || rank[a.data.status] - rank[b.data.status] || a.data.title.localeCompare(b.data.title)
+);
+---
+<Base title="Projects" description="Research projects in clinical neuroscience and medical AI.">
+  <h1 class="page-title">Projects</h1>
+  <p class="page-intro">Current and past research projects.</p>
+  <ul class="project-list">
+    {projects.map((p) => (
+      <li class:list={['project', { 'no-thumb': !p.data.thumbnail }]}>
+        {p.data.thumbnail && (
+          <a href={`/projects/${p.id}/`} tabindex="-1" aria-hidden="true">
+            <img class="thumb" src={p.data.thumbnail} alt={p.data.thumbnail_alt ?? ''} loading="lazy" width="352" height="220" />
+          </a>
+        )}
+        <div>
+          <span class="status">{p.data.status}</span>
+          <h2><a href={`/projects/${p.id}/`}>{p.data.title}</a></h2>
+          <p>{p.data.summary}</p>
+          {p.data.tags.length > 0 && <ul class="tags">{p.data.tags.map((t) => <li>{t}</li>)}</ul>}
+        </div>
+      </li>
+    ))}
+  </ul>
+</Base>

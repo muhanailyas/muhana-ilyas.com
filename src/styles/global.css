@@ -1,0 +1,252 @@
+/* ==========================================================================
+   muhana-ilyas.com stylesheet
+   Proportions follow the al-folio layout used by constantine-cooke.com:
+   800px column, 16px light body text, 40px light/bold name, 32px light section titles.
+   Colours: white, black, red links (#ca3737) and navy teal (#032f3c) for journal badges.
+   ========================================================================== */
+
+/* ---------- Colour tokens ---------- */
+:root {
+  --bg: #ffffff;
+  --text: #000000;
+  --muted: #6b6b6b;           /* dates and secondary text */
+  --link: #ca3737;            /* every clickable link */
+  --teal: #032f3c;            /* journal badges, profile tile */
+  --rule: rgba(0, 0, 0, 0.1); /* header hairline, form fields */
+  --code-bg: #f5f5f5;
+  --footer-bg: #1c1c1d;
+  --footer-text: #e8e8e8;
+  color-scheme: light;
+}
+:root[data-theme='dark'] {
+  --bg: #1c1c1d;
+  --text: #e8e8e8;
+  --muted: #a3a3a3;
+  --link: #ef7d7d;            /* lighter red keeps 4.5:1 contrast on the dark background */
+  --teal: #0d5b70;
+  --rule: rgba(255, 255, 255, 0.12);
+  --code-bg: #262628;
+  --footer-bg: #000000;
+  --footer-text: #e8e8e8;
+  color-scheme: dark;
+}
+
+/* ---------- Fonts ----------
+   Body: the visitor's own system font, as on constantine-cooke.com
+   (SF Pro on Mac/iPhone, Segoe UI on Windows, Roboto on Android/ChromeOS). Nothing to download.
+   Header: Neue Montreal once its files are uploaded and switched on in Settings; system font until then. */
+:root {
+  --font: ui-sans-serif, -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-head: var(--font);
+  --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace;
+  --measure: 50rem;           /* 800px, same as the reference site */
+}
+:root.nm { --font-head: 'Neue Montreal', ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; }
+
+*, *::before, *::after { box-sizing: border-box; }
+html { font-size: 100%; -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 1rem;
+  font-weight: 300;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  display: flex; flex-direction: column; min-height: 100vh;
+}
+img { max-width: 100%; height: auto; }
+a { color: var(--link); text-decoration: none; }
+a:hover, a:focus-visible { text-decoration: underline; text-underline-offset: 2px; }
+:focus-visible { outline: 2px solid var(--link); outline-offset: 2px; }
+h1, h2, h3, h4 { font-weight: 300; line-height: 1.2; margin: 0 0 0.5rem; }
+h1 { font-size: 2.5rem; }
+h2 { font-size: 2rem; }
+h3 { font-size: 1.25rem; }
+p { margin: 0 0 0.75rem; }
+strong, b { font-weight: 700; }
+em { font-style: italic; }
+.meta { color: var(--muted); font-size: 0.9rem; }
+hr { border: 0; height: 1px; background: var(--rule); margin: 2rem 0; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+.skip { position: absolute; left: -999px; top: 0; background: var(--bg); padding: 0.5rem 0.75rem; z-index: 20; }
+.skip:focus { left: 0.75rem; }
+
+/* ---------- Layout ---------- */
+.wrap { max-width: var(--measure); margin: 0 auto; padding: 0 15px; }
+main { flex: 1; padding: 3rem 0 4rem; }
+
+/* ---------- Header ---------- */
+.site-header { position: sticky; top: 0; z-index: 10; background: var(--bg); border-bottom: 1px solid var(--rule); font-family: var(--font-head); }
+.site-header .wrap { display: flex; align-items: center; gap: 1rem; padding-top: 0.5rem; padding-bottom: 0.5rem; max-width: 64rem; } /* wider than the text column so all nine menu items fit on one line */
+.brand { color: var(--text); font-size: 1.25rem; font-weight: 100; white-space: nowrap; }
+.brand strong { font-weight: 700; }
+.brand:hover { text-decoration: none; }
+.nav { order: 2; margin-left: auto; }
+.nav ul { display: flex; flex-wrap: wrap; list-style: none; margin: 0; padding: 0; }
+.nav a { display: block; color: var(--text); font-weight: 300; padding: 0.5rem 0.4rem; }
+.nav a:hover { color: var(--link); text-decoration: none; }
+.nav a[aria-current='page'] { color: var(--link); font-weight: 400; }
+.header-tools { order: 3; display: flex; align-items: center; gap: 0.25rem; }
+.icon-btn { background: none; border: 0; color: var(--text); cursor: pointer; padding: 0.5rem; display: inline-flex; align-items: center; font: inherit; font-weight: 300; }
+.icon-btn:hover { color: var(--link); }
+.menu-btn { display: none; }
+@media (max-width: 1000px) {
+  .menu-btn { display: inline-flex; }
+  .site-header .wrap { flex-wrap: wrap; }
+  .header-tools { order: 2; margin-left: auto; }
+  .nav { order: 3; width: 100%; margin-left: 0; display: none; }
+  .nav.open { display: block; }
+  .nav ul { flex-direction: column; padding-bottom: 0.5rem; }
+  .nav a { padding: 0.4rem 0; }
+}
+
+/* ---------- Page titles ---------- */
+.page-title { font-size: 2.5rem; font-weight: 300; margin-bottom: 0.5rem; }
+.page-intro { font-size: 1.25rem; line-height: 1.4; margin-bottom: 2.5rem; }
+.section { margin-top: 3rem; }
+.section > h2 { margin-bottom: 1rem; }
+
+/* ---------- About page ---------- */
+.hero-name { font-size: 2.5rem; font-weight: 300; margin-bottom: 0.5rem; font-family: var(--font-head); }
+.hero-name .first { font-weight: 300; }
+.hero-name strong { font-weight: 700; }
+.affil { font-size: 1.25rem; line-height: 1.4; margin-bottom: 2.5rem; }
+.affil p { display: inline; margin: 0; }
+.profile { float: right; width: 15rem; margin: 0.25rem 0 1.5rem 2rem; }
+.profile img { width: 15rem; height: 15rem; object-fit: cover; border-radius: 1.5rem; display: block; }
+.profile figcaption { margin-top: 0.5rem; text-align: center; }
+.interests { margin: 0 0 0.75rem; padding-left: 1.25rem; }
+.clear { clear: both; }
+@media (max-width: 640px) {
+  .profile { float: none; margin: 0 auto 1.5rem; }
+  .hero-name, .page-title { font-size: 2.1rem; }
+}
+
+/* ---------- News table ---------- */
+.news { width: 100%; border-collapse: collapse; }
+.news td { padding: 0.6rem 0; vertical-align: top; }
+.news td.date { font-size: 0.9rem; font-weight: 400; white-space: nowrap; width: 7.5rem; padding-right: 1rem; padding-top: 0.68rem; }
+.more { margin-top: 0.75rem; }
+.more summary { cursor: pointer; color: var(--link); }
+
+/* ---------- Publications ---------- */
+.filters { display: flex; flex-wrap: wrap; gap: 0.5rem 1.25rem; margin-bottom: 2.5rem; }
+.filters button { background: none; border: 0; padding: 0; font: inherit; font-weight: 300; color: var(--text); cursor: pointer; }
+.filters button:hover { color: var(--link); }
+.filters button[aria-pressed='true'] { color: var(--link); font-weight: 400; }
+.year-group { margin-bottom: 1.5rem; }
+.year-group > h2 { font-size: 1.5rem; color: var(--muted); margin: 0 0 1rem; text-align: right; border-bottom: 1px solid var(--rule); padding-bottom: 0.25rem; }
+.pub-list { list-style: none; margin: 0; padding: 0; }
+.pub { display: grid; grid-template-columns: 8rem minmax(0, 1fr); gap: 0 1rem; margin: 0 0 1.25rem; }
+.pub-badge { padding-top: 0.15rem; }
+.abbr { display: inline-block; min-width: 4.5rem; max-width: 100%; text-align: center; background: var(--teal); color: #fff; font-size: 0.75rem; font-weight: 700; line-height: 1; padding: 0.3rem 0.4rem; border-radius: 2px; overflow-wrap: anywhere; }
+.pub-title { display: block; color: var(--text); font-weight: 400; }
+a.pub-title:hover { color: var(--link); text-decoration: none; }
+.pub-authors { margin: 0; }
+.pub-venue { margin: 0; }
+.pub-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem; margin-top: 0.4rem; }
+.pub-actions a, .pub-actions button, .textbtn {
+  display: inline-block; background: none; cursor: pointer; font: inherit;
+  font-size: 0.64rem; font-weight: 400; letter-spacing: 0.02em; text-transform: uppercase; line-height: 1.5;
+  color: var(--text); border: 1px solid var(--text); border-radius: 2px; padding: 0.25rem 0.75rem;
+}
+.pub-actions a:hover, .pub-actions button:hover, .pub-actions button[aria-expanded='true'], .textbtn:hover { color: var(--link); border-color: var(--link); text-decoration: none; }
+.pub-panel { margin-top: 0.75rem; }
+.pub-panel[hidden] { display: none; }
+.badges { display: inline-flex; gap: 0.75rem; align-items: center; margin-left: auto; }
+.badges:empty { display: none; }
+.selected-list { list-style: none; padding: 0; margin: 0; }
+@media (max-width: 640px) {
+  .pub { grid-template-columns: 1fr; }
+  .pub-badge { margin-bottom: 0.25rem; }
+}
+
+/* ---------- Code and BibTeX ---------- */
+pre, code, kbd { font-family: var(--mono); font-size: 0.85em; }
+:not(pre) > code { background: var(--code-bg); padding: 0.1em 0.3em; border-radius: 3px; }
+pre { background: var(--code-bg); padding: 1rem; overflow-x: auto; border-radius: 4px; line-height: 1.5; margin: 0 0 1rem; }
+.bib { position: relative; }
+.bib pre { white-space: pre-wrap; word-break: break-word; font-size: 0.75rem; }
+.bib .copy { position: absolute; right: 0.75rem; top: 0.75rem; }
+.astro-code, .astro-code span { color: var(--shiki-light); background-color: var(--code-bg) !important; }
+:root[data-theme='dark'] .astro-code, :root[data-theme='dark'] .astro-code span { color: var(--shiki-dark); }
+
+/* ---------- Projects ---------- */
+.project-list { list-style: none; padding: 0; margin: 0; }
+.project { display: grid; grid-template-columns: 12rem minmax(0, 1fr); gap: 1.5rem; margin-bottom: 2.5rem; align-items: start; }
+.project.no-thumb { grid-template-columns: 1fr; }
+.project .thumb { width: 12rem; aspect-ratio: 16 / 10; object-fit: cover; border-radius: 0.75rem; display: block; }
+.project h2 { font-size: 1.25rem; font-weight: 400; margin-bottom: 0.25rem; }
+.project h2 a { color: var(--text); }
+.project h2 a:hover { color: var(--link); text-decoration: none; }
+.status { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); font-weight: 400; }
+.tags { display: flex; flex-wrap: wrap; gap: 0.25rem 0.75rem; list-style: none; padding: 0; margin: 0.5rem 0 0; color: var(--muted); font-size: 0.875rem; }
+.tags li::before { content: '#'; }
+@media (max-width: 640px) {
+  .project { grid-template-columns: 1fr; gap: 0.75rem; }
+  .project .thumb { width: 100%; }
+}
+
+/* ---------- Repositories ---------- */
+.repo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 22rem), 1fr)); gap: 2rem; list-style: none; padding: 0; margin: 0; }
+.repo h2 { font-size: 1.125rem; font-weight: 400; margin-bottom: 0.25rem; word-break: break-word; }
+.repo p { margin: 0 0 0.25rem; }
+
+/* ---------- Dated lists (teaching, blog) ---------- */
+.dated { list-style: none; padding: 0; margin: 0; }
+.dated > li { display: grid; grid-template-columns: 7.5rem minmax(0, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
+.dated .when { font-size: 0.9rem; font-weight: 400; padding-top: 0.1rem; }
+.dated h2, .dated h3 { font-size: 1.125rem; font-weight: 400; line-height: 1.4; margin: 0 0 0.15rem; }
+.dated h2 a, .dated h3 a { color: var(--text); }
+.dated h2 a:hover, .dated h3 a:hover { color: var(--link); text-decoration: none; }
+.dated p { margin: 0 0 0.25rem; }
+.group-title { font-size: 1.5rem; margin: 0 0 1rem; }
+@media (max-width: 640px) { .dated > li { grid-template-columns: 1fr; gap: 0; } }
+
+/* ---------- Long-form text ---------- */
+.prose h2 { font-size: 1.75rem; margin-top: 2rem; }
+.prose h3 { margin-top: 1.5rem; }
+.prose img { display: block; margin: 1.5rem auto; border-radius: 0.5rem; }
+.prose blockquote { margin: 1.5rem 0; padding-left: 1rem; border-left: 2px solid var(--link); color: var(--muted); }
+.prose table { border-collapse: collapse; width: 100%; margin-bottom: 1rem; }
+.prose th, .prose td { text-align: left; padding: 0.35rem 0.75rem 0.35rem 0; border-bottom: 1px solid var(--rule); }
+.prose .katex-display { overflow-x: auto; overflow-y: hidden; }
+.post-cover { width: 100%; margin: 1rem 0 1.5rem; border-radius: 0.75rem; }
+
+/* ---------- Atlas ---------- */
+.atlas-soon { min-height: 55vh; display: flex; flex-direction: column; justify-content: center; max-width: 36rem; }
+.eyebrow { font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); font-weight: 400; margin-bottom: 0.75rem; }
+.atlas-soon h1 { font-size: 2.5rem; }
+.atlas-soon .tagline { font-size: 1.25rem; line-height: 1.4; }
+.atlas-soon .mark { width: 3rem; height: 2px; background: var(--teal); margin: 1.5rem 0; }
+.atlas-soon .soon { font-size: 1.25rem; margin-bottom: 1.25rem; }
+.atlas-frame { width: 100%; border: 0; display: block; margin: 1.5rem 0; }
+
+/* ---------- Buttons (CV, Atlas, contact form) ---------- */
+.btn { display: inline-block; font: inherit; font-size: 0.875rem; font-weight: 400; color: var(--text); background: none; border: 1px solid var(--text); border-radius: 2px; padding: 0.4rem 1rem; cursor: pointer; text-transform: uppercase; letter-spacing: 0.02em; }
+.btn:hover { color: var(--link); border-color: var(--link); text-decoration: none; }
+.btn-plain { display: inline-block; padding: 0.4rem 0; margin-left: 1rem; }
+
+/* ---------- CV ---------- */
+.cv-actions { margin: 1rem 0 1.5rem; }
+.cv-frame { width: 100%; height: 85vh; border: 0; background: var(--code-bg); }
+
+/* ---------- Contact ---------- */
+.contact-grid { display: grid; grid-template-columns: 8rem minmax(0, 1fr); gap: 0.5rem 1rem; margin-bottom: 2.5rem; }
+.contact-grid dt { font-weight: 400; }
+.contact-grid dd { margin: 0; white-space: pre-line; }
+.form { display: grid; gap: 1rem; max-width: 34rem; }
+.form label { display: grid; gap: 0.25rem; }
+.form input, .form textarea { font: inherit; font-weight: 300; color: var(--text); background: transparent; border: 0; border-bottom: 1px solid var(--muted); padding: 0.4rem 0; }
+.form input:focus, .form textarea:focus { outline: none; border-bottom: 1px solid var(--link); }
+@media (max-width: 640px) { .contact-grid { grid-template-columns: 1fr; gap: 0; } .contact-grid dd { margin-bottom: 0.75rem; } }
+
+/* ---------- Footer (dark bar, as on the reference site) ---------- */
+.site-footer { background: var(--footer-bg); color: var(--footer-text); font-size: 0.75rem; padding: 0.75rem 0; }
+.site-footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.25rem 1rem; }
+.site-footer p { margin: 0; }
+.site-footer .links { display: flex; flex-wrap: wrap; gap: 0.25rem 0.9rem; list-style: none; padding: 0; margin: 0; }
+.site-footer a { color: var(--footer-text); }
+.site-footer a:hover { color: #ffffff; }

@@ -1,0 +1,31 @@
+---
+// Contact: email, address, profile links and an optional Formspree form.
+import Base from '../layouts/Base.astro';
+import Email from '../components/Email.astro';
+import { SITE, CONTACT } from '../lib/site';
+const formAction = CONTACT.form_enabled && CONTACT.formspree_id ? `https://formspree.io/f/${CONTACT.formspree_id}` : null;
+---
+<Base title="Contact" description={`How to contact ${SITE.full_name}.`}>
+  <h1 class="page-title">Contact</h1>
+  <p class="page-intro">{CONTACT.intro}</p>
+  <dl class="contact-grid">
+    <dt>Email</dt><dd><Email address={CONTACT.email || SITE.email} /></dd>
+    {CONTACT.address && <><dt>Address</dt><dd>{CONTACT.address}</dd></>}
+    {CONTACT.phone && <><dt>Phone</dt><dd>{CONTACT.phone}</dd></>}
+    <dt>Profiles</dt>
+    <dd>{SITE.socials.map((s, i) => <>{i > 0 && ' · '}<a href={s.url} rel="me noopener" target="_blank">{s.label}</a></>)}</dd>
+  </dl>
+
+  {formAction && (
+    <section>
+      <p>{CONTACT.form_intro}</p>
+      <form class="form" action={formAction} method="POST">
+        <label>Name <input type="text" name="name" autocomplete="name" required /></label>
+        <label>Email <input type="email" name="email" autocomplete="email" required /></label>
+        <label>Message <textarea name="message" rows="6" required></textarea></label>
+        <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off" />
+        <div><button class="btn" type="submit">Send message</button></div>
+      </form>
+    </section>
+  )}
+</Base>

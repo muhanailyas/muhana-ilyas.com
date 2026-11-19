@@ -1,0 +1,366 @@
+# =====================================================================
+#  Admin panel configuration (Sveltia CMS, compatible with Decap CMS)
+#  Every collection below appears in the left sidebar of /admin.
+#  You only need to edit this file once, during setup (step 4 of DEPLOY.md):
+#    - repo:     your GitHub username/repository
+#    - base_url: the address of your login helper on Cloudflare Workers
+# =====================================================================
+
+backend:
+  name: github
+  repo: muhanailyas/muhana-ilyas.com      # <-- your-github-username/your-repository
+  branch: main
+  base_url: https://sveltia-cms-auth.YOUR-SUBDOMAIN.workers.dev   # <-- from DEPLOY.md step 3
+  commit_messages:
+    create: "Add {{collection}}: {{slug}}"
+    update: "Update {{collection}}: {{slug}}"
+    delete: "Delete {{collection}}: {{slug}}"
+    uploadMedia: "Upload {{path}}"
+    deleteMedia: "Delete {{path}}"
+
+site_url: https://muhana-ilyas.com
+display_url: https://muhana-ilyas.com
+logo_url: /icon-512.png
+
+# Where uploaded images go. Files you drag into any image field land here.
+media_folder: public/uploads/images
+public_folder: /uploads/images
+
+slug:
+  encoding: ascii
+  clean_accents: true
+  maxlength: 70
+
+collections:
+
+  # -------------------------------------------------------------------
+  # SETTINGS: one-off pages and site-wide options
+  # -------------------------------------------------------------------
+  - name: settings
+    label: Settings
+    icon: settings
+    editor: { preview: false }
+    files:
+      - name: site
+        label: Site, profile and menu
+        file: content/settings/site.json
+        fields:
+          - { name: site_title, label: Site title (browser tab), widget: string }
+          - { name: first_names, label: First names (shown regular), widget: string }
+          - { name: last_name, label: Last name (shown bold), widget: string }
+          - { name: full_name, label: Full name (for search engines), widget: string }
+          - { name: honorific, label: Title, widget: string, required: false, hint: "e.g. dr." }
+          - { name: job_title, label: One-line job title (for search engines), widget: string }
+          - { name: affiliation_label, label: Affiliation label, widget: string, default: Affiliations }
+          - { name: affiliation, label: Affiliation line, widget: string, hint: "Markdown links allowed, e.g. MCS (AI), [Universitas Gadjah Mada](https://ugm.ac.id)" }
+          - { name: location, label: Location under photo, widget: string, required: false }
+          - { name: description, label: Site description (Google and social previews), widget: text }
+          - { name: avatar, label: Profile photo, widget: image, hint: "Square photo, at least 600 x 600 px. Drag and drop to replace." }
+          - { name: avatar_alt, label: Photo description (for screen readers), widget: string }
+          - { name: bio, label: Biography, widget: markdown, buttons: [bold, italic, link], editor_components: [] }
+          - { name: interests, label: Research interests, widget: list, hint: "Drag to reorder." }
+          - { name: personal, label: Personal line, widget: string, required: false }
+          - { name: news_count, label: News items shown on the home page, widget: number, value_type: int, default: 6 }
+          - { name: email, label: Email, widget: string }
+          - name: my_name_variants
+            label: Ways your name is written in author lists
+            widget: list
+            hint: "Any author matching one of these is shown in bold. Surname plus first initial is also matched automatically."
+          - name: socials
+            label: Profile links (footer and contact page)
+            widget: list
+            summary: "{{fields.label}}"
+            hint: "Drag to reorder, or use the trash icon to remove."
+            fields:
+              - { name: label, label: Label, widget: string }
+              - { name: url, label: URL, widget: string }
+          - name: menu
+            label: Top menu
+            widget: list
+            summary: "{{fields.label}} → {{fields.href}}"
+            hint: "Drag to reorder. Remove an item to hide that page from the menu."
+            fields:
+              - { name: label, label: Label, widget: string }
+              - { name: href, label: Link, widget: string, hint: "e.g. /publications/" }
+          - { name: alumni_of, label: Universities attended (for search engines), widget: list }
+          - { name: works_for, label: Employer (for search engines), widget: string }
+          - { name: social_image, label: Social sharing image, widget: image, hint: "1200 x 630 px. Shown when your link is shared." }
+          - name: header_font
+            label: Header font
+            widget: select
+            default: system
+            options:
+              - { label: "System font (SF Pro / Segoe UI / Roboto)", value: system }
+              - { label: "Neue Montreal (upload the font files first, see ADMIN-GUIDE.md)", value: neue-montreal }
+          - { name: show_altmetric, label: Show Altmetric badges on publications, widget: boolean, default: false }
+          - { name: show_dimensions, label: Show Dimensions citation badges on publications, widget: boolean, default: false }
+
+      - name: contact
+        label: Contact page
+        file: content/settings/contact.json
+        fields:
+          - { name: intro, label: Introduction, widget: text }
+          - { name: email, label: Email, widget: string }
+          - { name: address, label: Office address, widget: text, required: false }
+          - { name: phone, label: Phone, widget: string, required: false }
+          - { name: form_enabled, label: Show contact form, widget: boolean, default: false, hint: "Needs a free Formspree form ID (see ADMIN-GUIDE.md)." }
+          - { name: form_provider, label: Form provider, widget: hidden, default: formspree }
+          - { name: formspree_id, label: Formspree form ID, widget: string, required: false, hint: "The code after formspree.io/f/, e.g. xwkgabcd" }
+          - { name: form_intro, label: Text above the form, widget: string, required: false }
+
+      - name: cv
+        label: CV
+        file: content/settings/cv.json
+        fields:
+          - name: pdf
+            label: CV (PDF)
+            widget: file
+            media_folder: /public/uploads/files
+            public_folder: /uploads/files
+            accept: application/pdf
+            hint: "Drag and drop a new PDF to replace your CV."
+          - { name: updated, label: Last updated, widget: datetime, time_format: false, date_format: "YYYY-MM-DD", format: "YYYY-MM-DD" }
+          - { name: intro, label: Text above the viewer, widget: text, required: false }
+
+      - name: atlas
+        label: Atlas page (APONO)
+        file: content/atlas/atlas.md
+        editor: { preview: true }
+        fields:
+          - name: status
+            label: Status
+            widget: select
+            options:
+              - { label: "Coming soon", value: coming-soon }
+              - { label: "Live", value: live }
+            hint: "Switch to Live when the atlas is ready (see ATLAS-GO-LIVE.md)."
+          - { name: title, label: Title, widget: string }
+          - { name: short_title, label: Short name, widget: string, required: false }
+          - { name: tagline, label: Tagline, widget: string, required: false }
+          - { name: coming_soon_message, label: "Coming-soon message", widget: string, required: false }
+          - { name: notify_email, label: "Email for 'notify me' requests", widget: string, required: false, hint: "Leave empty to hide the link." }
+          - { name: notify_text, label: "'Notify me' link text", widget: string, required: false }
+          - { name: launch_url, label: "Live: link to the full atlas", widget: string, required: false }
+          - { name: embed_url, label: "Live: atlas app to embed in the page", widget: string, required: false, hint: "e.g. your Vercel app URL" }
+          - { name: embed_height, label: "Live: embed height in pixels", widget: number, value_type: int, default: 760, required: false }
+          - { name: image, label: "Live: image (if not embedding an app)", widget: image, required: false }
+          - { name: body, label: "Live: description", widget: markdown }
+
+  # -------------------------------------------------------------------
+  # NEWS (home page table)
+  # -------------------------------------------------------------------
+  - name: news
+    label: News
+    label_singular: News item
+    icon: campaign
+    folder: content/news
+    create: true
+    extension: md
+    format: frontmatter
+    identifier_field: text
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    summary: "{{date | date('YYYY-MM-DD')}}  {{text}}"
+    sortable_fields: [date]
+    editor: { preview: false }
+    fields:
+      - { name: date, label: Date, widget: datetime, time_format: false, date_format: "YYYY-MM-DD", format: "YYYY-MM-DD" }
+      - { name: text, label: Text, widget: string, hint: "One line. Markdown allowed: *italic*, [link text](https://...)" }
+
+  # -------------------------------------------------------------------
+  # PUBLICATIONS
+  # -------------------------------------------------------------------
+  - name: publications
+    label: Publications
+    label_singular: Publication
+    icon: menu_book
+    folder: content/publications
+    create: true
+    extension: md
+    format: frontmatter
+    slug: "{{year}}-{{slug}}"
+    summary: "{{year}} · {{title}}"
+    sortable_fields: [year, title]
+    view_filters:
+      - { label: Selected on home page, field: selected, pattern: true }
+      - { label: Journal articles, field: type, pattern: journal }
+      - { label: Books and chapters, field: type, pattern: book }
+      - { label: Preprints, field: type, pattern: preprint }
+    editor: { preview: false }
+    fields:
+      - name: bibtex
+        label: BibTeX (optional shortcut)
+        widget: text
+        required: false
+        hint: "Paste a BibTeX entry here and you only need to fill in the Title below. Authors, journal, year, volume, pages and DOI are read from the BibTeX automatically. Fields you fill in yourself always win."
+      - { name: title, label: Title, widget: string }
+      - { name: abbr, label: Journal badge, widget: string, required: false, hint: "Short label shown in the coloured box, e.g. EIMJ, Lancet Neurol, SNI" }
+      - name: authors
+        label: Authors
+        widget: list
+        required: false
+        hint: "One author per row, in order. Drag to reorder. Your own name is bolded automatically."
+      - name: type
+        label: Type
+        widget: select
+        default: journal
+        options:
+          - { label: Journal article, value: journal }
+          - { label: Conference paper, value: conference }
+          - { label: Book, value: book }
+          - { label: Book chapter, value: book-chapter }
+          - { label: Preprint, value: preprint }
+          - { label: Thesis, value: thesis }
+          - { label: Other, value: other }
+      - { name: journal, label: "Journal / conference / book title", widget: string, required: false }
+      - { name: publisher, label: Publisher (books), widget: string, required: false }
+      - { name: year, label: Year, widget: number, value_type: int, required: false }
+      - { name: month, label: Month (1-12), widget: number, value_type: int, min: 1, max: 12, required: false }
+      - { name: volume, label: Volume, widget: string, required: false }
+      - { name: issue, label: Issue, widget: string, required: false }
+      - { name: pages, label: Pages or article number, widget: string, required: false }
+      - { name: doi, label: DOI, widget: string, required: false, hint: "Only the DOI itself, e.g. 10.1002/epi4.70019" }
+      - { name: url, label: Link (if there is no DOI), widget: string, required: false }
+      - name: pdf
+        label: PDF
+        widget: file
+        required: false
+        media_folder: /public/uploads/files
+        public_folder: /uploads/files
+        hint: "Only upload a PDF if the licence allows it (for example open access)."
+      - { name: code, label: Code link, widget: string, required: false }
+      - { name: slides, label: Slides link, widget: string, required: false }
+      - { name: abstract, label: Abstract, widget: text, required: false }
+      - { name: note, label: Short note, widget: string, required: false, hint: "e.g. Equal contribution; In Indonesian" }
+      - { name: selected, label: Show on home page (Selected publications), widget: boolean, default: false }
+      - { name: selected_order, label: Position on home page, widget: number, value_type: int, required: false, hint: "1 = first" }
+      - { name: show_altmetric, label: Altmetric badge, widget: boolean, default: true, hint: "Only appears if badges are switched on in Settings." }
+      - { name: show_dimensions, label: Dimensions badge, widget: boolean, default: true }
+      - { name: hidden, label: Hide from the site, widget: boolean, default: false }
+
+  # -------------------------------------------------------------------
+  # PROJECTS
+  # -------------------------------------------------------------------
+  - name: projects
+    label: Projects
+    label_singular: Project
+    icon: science
+    folder: content/projects
+    create: true
+    extension: md
+    format: frontmatter
+    slug: "{{slug}}"
+    summary: "{{order}}. {{title}} ({{status}})"
+    sortable_fields: [order, title]
+    fields:
+      - { name: title, label: Title, widget: string }
+      - { name: summary, label: Short description, widget: text, hint: "One or two sentences for the projects list." }
+      - { name: thumbnail, label: Thumbnail, widget: image, required: false, hint: "Landscape image, about 1200 x 750 px." }
+      - { name: thumbnail_alt, label: Thumbnail description, widget: string, required: false }
+      - name: status
+        label: Status
+        widget: select
+        default: active
+        options: [active, planned, paused, completed]
+      - { name: tags, label: Tags, widget: list, required: false }
+      - { name: start, label: Start (year), widget: string, required: false }
+      - { name: end, label: End (year), widget: string, required: false }
+      - name: links
+        label: Links
+        widget: list
+        required: false
+        summary: "{{fields.label}}"
+        fields:
+          - { name: label, label: Label, widget: string }
+          - { name: url, label: URL, widget: string }
+      - { name: order, label: Position in list, widget: number, value_type: int, required: false, hint: "1 = first. Leave empty to sort by status." }
+      - { name: hidden, label: Hide from the site, widget: boolean, default: false }
+      - { name: body, label: Full description, widget: markdown, required: false }
+
+  # -------------------------------------------------------------------
+  # REPOSITORIES (entered by hand, no GitHub API)
+  # -------------------------------------------------------------------
+  - name: repositories
+    label: Repositories
+    label_singular: Repository
+    icon: code
+    folder: content/repositories
+    create: true
+    extension: md
+    format: frontmatter
+    identifier_field: name
+    slug: "{{slug}}"
+    summary: "{{order}}. {{name}}"
+    sortable_fields: [order, name]
+    editor: { preview: false }
+    fields:
+      - { name: name, label: Repository name, widget: string }
+      - { name: url, label: GitHub URL, widget: string }
+      - { name: description, label: Description, widget: text }
+      - { name: language, label: Main language, widget: string, required: false }
+      - { name: stars, label: Stars, widget: number, value_type: int, required: false, hint: "Update by hand when you like; 0 hides the count." }
+      - { name: demo, label: Live demo URL, widget: string, required: false }
+      - { name: order, label: Position in list, widget: number, value_type: int, required: false }
+      - { name: hidden, label: Hide from the site, widget: boolean, default: false }
+
+  # -------------------------------------------------------------------
+  # TEACHING (courses, talks, workshops)
+  # -------------------------------------------------------------------
+  - name: teaching
+    label: Teaching
+    label_singular: Teaching item
+    icon: school
+    folder: content/teaching
+    create: true
+    extension: md
+    format: frontmatter
+    slug: "{{year}}-{{month}}-{{slug}}"
+    summary: "{{date | date('YYYY-MM-DD')}} · {{title}}"
+    sortable_fields: [date, title]
+    editor: { preview: false }
+    fields:
+      - { name: title, label: Title, widget: string }
+      - name: kind
+        label: Type
+        widget: select
+        default: talk
+        options: [course, talk, workshop, lecture, supervision, other]
+      - { name: date, label: Date, widget: datetime, time_format: false, date_format: "YYYY-MM-DD", format: "YYYY-MM-DD" }
+      - { name: institution, label: Institution or event, widget: string, required: false }
+      - { name: location, label: Location, widget: string, required: false }
+      - { name: role, label: Your role, widget: string, required: false }
+      - { name: description, label: Description, widget: text, required: false }
+      - name: slides
+        label: Slides (PDF upload or link)
+        widget: file
+        required: false
+        media_folder: /public/uploads/files
+        public_folder: /uploads/files
+      - { name: link, label: Event page link, widget: string, required: false }
+      - { name: hidden, label: Hide from the site, widget: boolean, default: false }
+
+  # -------------------------------------------------------------------
+  # BLOG
+  # -------------------------------------------------------------------
+  - name: blog
+    label: Blog
+    label_singular: Post
+    icon: edit_note
+    folder: content/blog
+    create: true
+    extension: md
+    format: frontmatter
+    slug: "{{year}}-{{month}}-{{slug}}"
+    summary: "{{date | date('YYYY-MM-DD')}} · {{title}}{{draft | ternary(' (draft)', '')}}"
+    sortable_fields: [date, title]
+    fields:
+      - { name: title, label: Title, widget: string }
+      - { name: date, label: Date, widget: datetime, time_format: false, date_format: "YYYY-MM-DD", format: "YYYY-MM-DD" }
+      - { name: description, label: Summary, widget: text, required: false, hint: "Shown in the post list and in Google results." }
+      - { name: tags, label: Tags, widget: list, required: false }
+      - { name: cover, label: Cover image, widget: image, required: false }
+      - { name: cover_alt, label: Cover image description, widget: string, required: false }
+      - { name: draft, label: Draft (hidden from the site), widget: boolean, default: false }
+      - name: body
+        label: Post
+        widget: markdown
+        hint: "Maths: $x^2$ inline or $$...$$ on its own line. Code: use the code block button."

@@ -1,0 +1,40 @@
+---
+// Teaching: courses, talks and workshops, newest first, grouped into upcoming and past.
+import Base from '../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+import { fmtDate, mdInline } from '../lib/site';
+
+const items = (await getCollection('teaching', (t) => !t.data.hidden)).sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+const today = new Date();
+today.setUTCHours(0, 0, 0, 0);
+const upcoming = items.filter((t) => t.data.date >= today).reverse();
+const past = items.filter((t) => t.data.date < today);
+const kindLabel: Record<string, string> = { course: 'Course', talk: 'Talk', workshop: 'Workshop', lecture: 'Lecture', supervision: 'Supervision', other: '' };
+---
+<Base title="Teaching" description="Courses, talks and workshops.">
+  <h1 class="page-title">Teaching</h1>
+  <p class="page-intro">Courses, invited talks and workshops, mostly on clinical research methods and AI in medicine.</p>
+  {[{ label: 'Upcoming', list: upcoming }, { label: 'Past', list: past }].filter((g) => g.list.length).map((g) => (
+    <section style="margin-bottom:2.5rem">
+      <h2 class="group-title">{g.label}</h2>
+      <ul class="dated">
+        {g.list.map((t) => (
+          <li>
+            <span class="when">{fmtDate(t.data.date)}</span>
+            <div>
+              <h3>{t.data.title}</h3>
+              <p class="meta">{[kindLabel[t.data.kind], t.data.role, t.data.institution, t.data.location].filter(Boolean).join(' · ')}</p>
+              {t.data.description && <p set:html={mdInline(t.data.description)} />}
+              {(t.data.slides || t.data.link) && (
+                <p class="pub-actions">
+                  {t.data.slides && <a href={t.data.slides} target="_blank" rel="noopener">Slides</a>}
+                  {t.data.link && <a href={t.data.link} target="_blank" rel="noopener">Event page</a>}
+                </p>
+              )}
+            </div>
+          </li>
+        ))}
+      </ul>
+    </section>
+  ))}
+</Base>
