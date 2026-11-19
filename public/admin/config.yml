@@ -8,9 +8,9 @@
 
 backend:
   name: github
-  repo: muhanailyas/muhana-ilyas.com      # <-- your-github-username/your-repository
+  repo: muhanailyas/muhana-ilyas.com # <-- your-github-username/your-repository
   branch: main
-  base_url: https://sveltia-cms-auth.muhanailyas.workers.dev   # <-- from DEPLOY.md step 3
+  base_url: https://sveltia-cms-auth.muhanailyas.workers.dev  # <-- from DEPLOY.md step 3
   commit_messages:
     create: "Add {{collection}}: {{slug}}"
     update: "Update {{collection}}: {{slug}}"
