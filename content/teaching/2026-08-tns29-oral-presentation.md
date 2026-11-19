@@ -5,5 +5,8 @@ date: 2026-08-20
 institution: Thai Neuroscience Society (TNS29)
 location: Bang Saen, Thailand
 role: Presenter
-description: Replace this line with the title of your presentation.
+description: '"Artificial Intelligence for Nerve Conduction Studies: A Scoping Review of Clinical Classification, Physiologic Modeling, and Reporting Support"'
+slides: ''
+link: ''
+hidden: false
 ---
