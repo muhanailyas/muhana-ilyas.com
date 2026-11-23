@@ -79,7 +79,7 @@ main { flex: 1; padding: 3rem 0 4rem; }
 
 /* ---------- Header ---------- */
 .site-header { position: sticky; top: 0; z-index: 10; background: var(--bg); border-bottom: 1px solid var(--rule); font-family: var(--font-head); }
-.site-header .wrap { display: flex; align-items: center; gap: 1rem; padding-top: 0.5rem; padding-bottom: 0.5rem; max-width: 72rem; } /* wider than the text column so all ten menu items fit on one line */
+.site-header .wrap { display: flex; align-items: center; gap: 1rem; padding-top: 0.5rem; padding-bottom: 0.5rem; max-width: 64rem; } /* wider than the text column so all nine menu items fit on one line */
 .brand { color: var(--text); font-size: 1.25rem; font-weight: 100; white-space: nowrap; }
 .brand strong { font-weight: 700; }
 .brand:hover { text-decoration: none; }
@@ -92,7 +92,7 @@ main { flex: 1; padding: 3rem 0 4rem; }
 .icon-btn { background: none; border: 0; color: var(--text); cursor: pointer; padding: 0.5rem; display: inline-flex; align-items: center; font: inherit; font-weight: 300; }
 .icon-btn:hover { color: var(--link); }
 .menu-btn { display: none; }
-@media (max-width: 1120px) {
+@media (max-width: 1000px) {
   .menu-btn { display: inline-flex; }
   .site-header .wrap { flex-wrap: wrap; }
   .header-tools { order: 2; margin-left: auto; }
@@ -189,39 +189,6 @@ pre { background: var(--code-bg); padding: 1rem; overflow-x: auto; border-radius
   .project .thumb { width: 100%; }
 }
 
-/* ---------- Project figures ---------- */
-.fig { margin: 1.5rem 0 2rem; }
-.fig img { display: block; width: 100%; height: auto; border: 1px solid var(--rule); border-radius: 0.75rem; background: #fff; }
-.fig figcaption { font-size: 0.875rem; color: var(--muted); margin-top: 0.6rem; line-height: 1.45; }
-.fig figcaption strong { color: var(--text); font-weight: 400; }
-.project .thumb { border: 1px solid var(--rule); background: #fff; }
-
-/* ---------- Skills ---------- */
-.skill { grid-template-columns: 9rem minmax(0, 1fr); }
-.skill .skill-fig { width: 9rem; aspect-ratio: 1 / 1; object-fit: contain; border-radius: 0.75rem; }
-.skill h2 { font-size: 1.25rem; font-weight: 400; margin-bottom: 0.25rem; }
-.tool-list { display: flex; flex-wrap: wrap; gap: 0.35rem; list-style: none; padding: 0; margin: 0.5rem 0 0; }
-.tool-list li { font-size: 0.75rem; font-weight: 400; border: 1px solid var(--rule); border-radius: 2px; padding: 0.1rem 0.5rem; }
-.skill-links { margin-top: 0.5rem; font-size: 0.9rem; }
-@media (max-width: 640px) { .skill { grid-template-columns: 6rem minmax(0, 1fr); gap: 1rem; } .skill .skill-fig { width: 6rem; } }
-
-/* ---------- Collaborations and funding ---------- */
-.subhead { font-size: 1.25rem; font-weight: 400; margin: 2rem 0 1rem; color: var(--muted); }
-.subhead-lg { font-size: 1.5rem; margin-bottom: 1rem; }
-.logo-grid { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(9.5rem, 1fr)); gap: 1.75rem 1rem; }
-.logo-card { display: flex; flex-direction: column; gap: 0.35rem; color: var(--text); }
-a.logo-card:hover { text-decoration: none; }
-a.logo-card:hover .logo-name { color: var(--link); }
-.logo-box { height: 5.5rem; display: flex; align-items: center; justify-content: center; border: 1px solid var(--rule); border-radius: 0.75rem; background: #fff; padding: 0.75rem; }
-.logo-box img { max-height: 100%; max-width: 100%; object-fit: contain; filter: grayscale(1); opacity: 0.85; transition: filter 0.2s, opacity 0.2s; }
-a.logo-card:hover .logo-box img { filter: none; opacity: 1; }
-.logo-text { font-size: 1.5rem; font-weight: 700; letter-spacing: 0.04em; color: #032f3c; }
-.logo-name { font-size: 0.95rem; font-weight: 400; line-height: 1.3; }
-.logo-meta, .logo-desc, .logo-projects { font-size: 0.82rem; color: var(--muted); margin: 0; line-height: 1.4; }
-.logo-desc { margin-top: 0.25rem; }
-.logo-projects { margin-top: 0.2rem; }
-.funding { margin-top: 0.5rem; }
-
 /* ---------- Repositories ---------- */
 .repo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 22rem), 1fr)); gap: 2rem; list-style: none; padding: 0; margin: 0; }
 .repo h2 { font-size: 1.125rem; font-weight: 400; margin-bottom: 0.25rem; word-break: break-word; }
@@ -246,7 +213,7 @@ a.logo-card:hover .logo-box img { filter: none; opacity: 1; }
 .prose table { border-collapse: collapse; width: 100%; margin-bottom: 1rem; }
 .prose th, .prose td { text-align: left; padding: 0.35rem 0.75rem 0.35rem 0; border-bottom: 1px solid var(--rule); }
 .prose .katex-display { overflow-x: auto; overflow-y: hidden; }
-.post-cover { width: 100%; margin: 1rem 0 1.5rem; border-radius: 0.75rem; border: 1px solid var(--rule); background: #fff; }
+.post-cover { width: 100%; margin: 1rem 0 1.5rem; border-radius: 0.75rem; }
 
 /* ---------- Atlas ---------- */
 .atlas-soon { min-height: 55vh; display: flex; flex-direction: column; justify-content: center; max-width: 36rem; }

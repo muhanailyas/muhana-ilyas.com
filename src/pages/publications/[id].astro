@@ -1,0 +1,52 @@
+---
+// One page per publication. Carries the Google Scholar "citation_*" meta tags,
+// so Scholar can match the page to the paper, plus the full abstract and BibTeX.
+import Base from '../../layouts/Base.astro';
+import PubEntry from '../../components/PubEntry.astro';
+import PubScripts from '../../components/PubScripts.astro';
+import { getPublications, TYPE_LABELS, type Pub } from '../../lib/publications';
+
+export async function getStaticPaths() {
+  const pubs = await getPublications();
+  return pubs.map((pub) => ({ params: { id: pub.id }, props: { pub } }));
+}
+const { pub } = Astro.props as { pub: Pub };
+const date = pub.year ? `${pub.year}/${String(pub.month ?? 1).padStart(2, '0')}/01` : undefined;
+const [firstPage, lastPage] = (pub.pages ?? '').split(/[-–]+/);
+const pdfUrl = pub.pdf ? new URL(pub.pdf, Astro.site).toString() : undefined;
+const desc = pub.abstract ? pub.abstract.slice(0, 200) + (pub.abstract.length > 200 ? '…' : '') : `${pub.title}. ${pub.journal ?? ''} ${pub.year ?? ''}`;
+---
+<Base title={pub.title} description={desc} type="article">
+  <Fragment slot="head">
+    <meta name="citation_title" content={pub.title} />
+    {pub.authors.map((a) => <meta name="citation_author" content={a} />)}
+    {date && <meta name="citation_publication_date" content={date} />}
+    {pub.type === 'journal' && pub.journal && <meta name="citation_journal_title" content={pub.journal} />}
+    {pub.type === 'conference' && pub.journal && <meta name="citation_conference_title" content={pub.journal} />}
+    {pub.type === 'book-chapter' && pub.journal && <meta name="citation_inbook_title" content={pub.journal} />}
+    {pub.publisher && <meta name="citation_publisher" content={pub.publisher} />}
+    {pub.volume && <meta name="citation_volume" content={pub.volume} />}
+    {pub.issue && <meta name="citation_issue" content={pub.issue} />}
+    {firstPage && <meta name="citation_firstpage" content={firstPage} />}
+    {lastPage && <meta name="citation_lastpage" content={lastPage} />}
+    {pub.doi && <meta name="citation_doi" content={pub.doi} />}
+    {pdfUrl && <meta name="citation_pdf_url" content={pdfUrl} />}
+    {pub.abstract && <meta name="citation_abstract" content={pub.abstract} />}
+  </Fragment>
+
+  <p class="eyebrow">{TYPE_LABELS[pub.type]}</p>
+  <h1 class="page-title" style="font-size:2rem">{pub.title}</h1>
+  <PubEntry pub={pub} linkTitle={false} />
+  {pub.abstract && (
+    <section class="section">
+      <h2>Abstract</h2>
+      <p>{pub.abstract}</p>
+    </section>
+  )}
+  <p class="section"><a href="/publications/">&larr; All publications</a></p>
+  <PubScripts />
+</Base>
+<style>
+  /* The title is already the page heading, so hide the repeated one inside the entry. */
+  :global(main .pub .pub-title) { display: none; }
+</style>

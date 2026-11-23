@@ -4,17 +4,20 @@ import Base from '../../layouts/Base.astro';
 import PubEntry from '../../components/PubEntry.astro';
 import PubScripts from '../../components/PubScripts.astro';
 import { getPublications, TYPE_LABELS } from '../../lib/publications';
-import { SITE, pageText } from '../../lib/site';
+import { SITE } from '../../lib/site';
 
 const pubs = await getPublications();
 const years = [...new Set(pubs.map((p) => p.year ?? 0))].sort((a, b) => b - a);
 const types = Object.keys(TYPE_LABELS).filter((t) => pubs.some((p) => p.type === t));
 const PLURAL: Record<string, string> = { journal: 'Journal articles', conference: 'Conference papers', book: 'Books', 'book-chapter': 'Book chapters', preprint: 'Preprints', thesis: 'Theses', other: 'Other' };
-const text = pageText('publications', 'Publications', { count: pubs.length }, '{count} publications, newest first. My name is in bold. An up-to-date list with citation counts is on [Google Scholar]({scholar}).');
+const scholar = SITE.socials.find((s) => /scholar/i.test(s.label));
 ---
-<Base title={text.title} description={`Publications by ${SITE.full_name}.`}>
-  <h1 class="page-title">{text.title}</h1>
-  {text.intro && <p class="page-intro" set:html={text.intro} />}
+<Base title="Publications" description={`Publications by ${SITE.full_name}.`}>
+  <h1 class="page-title">Publications</h1>
+  <p class="page-intro">
+    {pubs.length} publications, newest first. My name is in bold.{' '}
+    {scholar && <>An up-to-date list with citation counts is on <a href={scholar.url}>Google Scholar</a>.</>}
+  </p>
 
   {types.length > 1 && (
     <div class="filters" role="group" aria-label="Filter by type">

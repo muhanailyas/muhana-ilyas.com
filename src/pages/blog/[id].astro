@@ -1,0 +1,31 @@
+---
+// A single blog post. Supports markdown, images, code blocks and LaTeX ($...$ and $$...$$).
+import Base from '../../layouts/Base.astro';
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import { fmtDate, readingTime, SITE } from '../../lib/site';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog', (p) => !p.data.draft);
+  return posts.map((post) => ({ params: { id: post.id }, props: { post } }));
+}
+const { post } = Astro.props as { post: CollectionEntry<'blog'> };
+const { Content } = await render(post);
+const d = post.data;
+const ld = {
+  '@context': 'https://schema.org', '@type': 'BlogPosting', headline: d.title, datePublished: d.date.toISOString(),
+  author: { '@type': 'Person', name: SITE.full_name, url: Astro.site?.toString() }, description: d.description,
+};
+---
+<Base title={d.title} description={d.description} image={d.cover ?? undefined} type="article" katex>
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(ld)} />
+  <article>
+    <h1 class="page-title">{d.title}</h1>
+    <p class="meta">
+      <time datetime={d.date.toISOString()}>{fmtDate(d.date)}</time> &middot; {readingTime(post.body)}
+      {d.tags.length > 0 && <> &middot; {d.tags.map((t, i) => <>{i > 0 && ', '}<a href={`/blog/tag/${encodeURIComponent(t)}/`}>{t}</a></>)}</>}
+    </p>
+    {d.cover && <img class="post-cover" src={d.cover} alt={d.cover_alt ?? ''} />}
+    <div class="prose"><Content /></div>
+  </article>
+  <p class="section"><a href="/blog/">&larr; All posts</a></p>
+</Base>

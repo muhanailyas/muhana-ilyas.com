@@ -2,14 +2,14 @@
 // Repositories: entered by hand in the admin panel (no GitHub API needed).
 import Base from '../layouts/Base.astro';
 import { getCollection } from 'astro:content';
-import { byOrder, pageText } from '../lib/site';
+import { SITE, byOrder } from '../lib/site';
 
 const repos = (await getCollection('repositories', (r) => !r.data.hidden)).sort((a, b) => byOrder(a, b) || a.data.name.localeCompare(b.data.name));
-const text = pageText('repositories', 'Repositories', { count: repos.length }, 'Code for my research and coursework, all on [GitHub]({github}).');
+const gh = SITE.socials.find((s) => /github/i.test(s.label));
 ---
-<Base title={text.title} description="Open-source code and research software.">
-  <h1 class="page-title">{text.title}</h1>
-  {text.intro && <p class="page-intro" set:html={text.intro} />}
+<Base title="Repositories" description="Open-source code and research software.">
+  <h1 class="page-title">Repositories</h1>
+  <p class="page-intro">Code for my research and coursework{gh && <>, all on <a href={gh.url}>GitHub</a></>}.</p>
   <ul class="repo-grid">
     {repos.map((r) => (
       <li class="repo">

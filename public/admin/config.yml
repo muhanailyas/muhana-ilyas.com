@@ -8,9 +8,9 @@
 
 backend:
   name: github
-  repo: muhanailyas/muhana-ilyas.com      # <-- your-github-username/your-repository
+  repo: muhanailyas/muhana-ilyas.com # <-- your-github-username/your-repository
   branch: main
-  base_url: https://sveltia-cms-auth.muhanailyas.workers.dev   # login helper (DEPLOY.md step 3)
+  base_url: https://sveltia-cms-auth.muhanailyas.workers.dev  # <-- from DEPLOY.md step 3
   commit_messages:
     create: "Add {{collection}}: {{slug}}"
     update: "Update {{collection}}: {{slug}}"
@@ -94,74 +94,6 @@ collections:
               - { label: "Neue Montreal (upload the font files first, see ADMIN-GUIDE.md)", value: neue-montreal }
           - { name: show_altmetric, label: Show Altmetric badges on publications, widget: boolean, default: false }
           - { name: show_dimensions, label: Show Dimensions citation badges on publications, widget: boolean, default: false }
-
-      - name: pages
-        label: Page titles and introductions
-        file: content/settings/pages.json
-        fields:
-          - name: skills
-            label: "Skills page"
-            widget: object
-            collapsed: true
-            required: false
-            fields:
-              - { name: title, label: Page title, widget: string, required: false }
-              - { name: intro, label: Introduction under the title, widget: text, required: false }
-          - name: collaborations
-            label: "Collaborations and funding (on the Projects page)"
-            widget: object
-            collapsed: true
-            required: false
-            fields:
-              - { name: title, label: Section title, widget: string, required: false }
-              - { name: intro, label: Introduction under the title, widget: text, required: false }
-          - name: projects
-            label: "Projects page"
-            widget: object
-            collapsed: true
-            fields:
-              - { name: title, label: Page title, widget: string }
-              - { name: intro, label: Introduction under the title, widget: text, required: false, hint: "Optional. Write {count} for the number of items (updates itself), {scholar} for your Google Scholar link, {github} for your GitHub link. Links: [text](https://...)" }
-          - name: publications
-            label: "Publications page"
-            widget: object
-            collapsed: true
-            fields:
-              - { name: title, label: Page title, widget: string }
-              - { name: intro, label: Introduction under the title, widget: text, required: false, hint: "Optional. Write {count} for the number of items (updates itself), {scholar} for your Google Scholar link, {github} for your GitHub link. Links: [text](https://...)" }
-          - name: repositories
-            label: "Repositories page"
-            widget: object
-            collapsed: true
-            fields:
-              - { name: title, label: Page title, widget: string }
-              - { name: intro, label: Introduction under the title, widget: text, required: false, hint: "Optional. Write {count} for the number of items (updates itself), {scholar} for your Google Scholar link, {github} for your GitHub link. Links: [text](https://...)" }
-          - name: teaching
-            label: "Teaching page"
-            widget: object
-            collapsed: true
-            fields:
-              - { name: title, label: Page title, widget: string }
-              - { name: intro, label: Introduction under the title, widget: text, required: false, hint: "Optional. Write {count} for the number of items (updates itself), {scholar} for your Google Scholar link, {github} for your GitHub link. Links: [text](https://...)" }
-          - name: blog
-            label: "Blog page"
-            widget: object
-            collapsed: true
-            fields:
-              - { name: title, label: Page title, widget: string }
-              - { name: intro, label: Introduction under the title, widget: text, required: false, hint: "Optional. Write {count} for the number of items (updates itself), {scholar} for your Google Scholar link, {github} for your GitHub link. Links: [text](https://...)" }
-          - name: contact
-            label: "Contact page"
-            widget: object
-            collapsed: true
-            fields:
-              - { name: title, label: Page title, widget: string }
-          - name: cv
-            label: "CV page"
-            widget: object
-            collapsed: true
-            fields:
-              - { name: title, label: Page title, widget: string }
 
       - name: contact
         label: Contact page
@@ -306,45 +238,6 @@ collections:
       - { name: hidden, label: Hide from the site, widget: boolean, default: false }
 
   # -------------------------------------------------------------------
-  # SKILLS (methods and tools)
-  # -------------------------------------------------------------------
-  - name: skills
-    label: Skills
-    label_singular: Skill
-    icon: construction
-    folder: content/skills
-    create: true
-    extension: md
-    format: frontmatter
-    slug: "{{slug}}"
-    summary: "{{order}}. {{title}}"
-    sortable_fields: [order, title]
-    editor: { preview: false }
-    fields:
-      - { name: title, label: Skill, widget: string }
-      - { name: summary, label: Short description, widget: text, hint: "Two or three sentences: what you can do and where you have used it." }
-      - name: figure
-        label: Figure
-        widget: image
-        required: false
-        media_folder: /public/uploads/figures
-        public_folder: /uploads/figures
-        hint: "Square image or icon, at least 400 x 400 px."
-      - { name: figure_alt, label: Figure description, widget: string, required: false }
-      - { name: tools, label: Tools and methods, widget: list, required: false, hint: "One per row, e.g. RevMan, VOSviewer. Drag to reorder." }
-      - name: links
-        label: Links
-        widget: list
-        required: false
-        summary: "{{fields.label}}"
-        hint: "Optional, e.g. a related project or publication."
-        fields:
-          - { name: label, label: Label, widget: string }
-          - { name: url, label: URL, widget: string }
-      - { name: order, label: Position on the page, widget: number, value_type: int, required: false, hint: "1 = first" }
-      - { name: hidden, label: Hide from the site, widget: boolean, default: false }
-
-  # -------------------------------------------------------------------
   # PROJECTS
   # -------------------------------------------------------------------
   - name: projects
@@ -360,7 +253,6 @@ collections:
     sortable_fields: [order, title]
     fields:
       - { name: title, label: Title, widget: string }
-      - { name: short_title, label: Short name, widget: string, required: false, hint: "e.g. APONO. Used where space is short." }
       - { name: summary, label: Short description, widget: text, hint: "One or two sentences for the projects list." }
       - { name: thumbnail, label: Thumbnail, widget: image, required: false, hint: "Landscape image, about 1200 x 750 px." }
       - { name: thumbnail_alt, label: Thumbnail description, widget: string, required: false }
@@ -380,83 +272,9 @@ collections:
         fields:
           - { name: label, label: Label, widget: string }
           - { name: url, label: URL, widget: string }
-      - name: figures
-        label: Figures
-        widget: list
-        required: false
-        summary: "{{fields.caption}}"
-        hint: "Drag images in. The first figure appears under the summary; the others after the text. Drag to reorder."
-        fields:
-          - name: image
-            label: Image
-            widget: image
-            media_folder: /public/uploads/figures
-            public_folder: /uploads/figures
-          - { name: caption, label: Caption, widget: text, required: false }
-          - { name: alt, label: Image description (for screen readers), widget: string, required: false }
       - { name: order, label: Position in list, widget: number, value_type: int, required: false, hint: "1 = first. Leave empty to sort by status." }
       - { name: hidden, label: Hide from the site, widget: boolean, default: false }
       - { name: body, label: Full description, widget: markdown, required: false }
-
-  # -------------------------------------------------------------------
-  # COLLABORATIONS AND FUNDING (logos under the Projects page)
-  # -------------------------------------------------------------------
-  - name: collaborators
-    label: Collaborations and funding
-    label_singular: Institution or funder
-    icon: handshake
-    folder: content/collaborators
-    create: true
-    extension: md
-    format: frontmatter
-    identifier_field: name
-    slug: "{{slug}}"
-    summary: "{{kind}} · {{region}} · {{name}}"
-    sortable_fields: [order, name]
-    view_filters:
-      - { label: Collaborations, field: kind, pattern: collaboration }
-      - { label: Funding, field: kind, pattern: funding }
-    editor: { preview: false }
-    fields:
-      - { name: name, label: Institution or funder name, widget: string }
-      - { name: short_name, label: Short name, widget: string, required: false, hint: "e.g. UGM. Shown in the box until you upload a logo." }
-      - name: kind
-        label: Type
-        widget: select
-        default: collaboration
-        options:
-          - { label: "Collaboration (logo grid)", value: collaboration }
-          - { label: "Funding or grant (list)", value: funding }
-      - name: region
-        label: Where
-        widget: select
-        default: indonesia
-        options:
-          - { label: Indonesia, value: indonesia }
-          - { label: International, value: international }
-      - name: logo
-        label: Logo
-        widget: image
-        required: false
-        media_folder: /public/uploads/logos
-        public_folder: /uploads/logos
-        hint: "PNG or SVG with a transparent or white background. Shown in grey, in colour on hover. Use the institution's official logo file."
-      - { name: url, label: Website, widget: string, required: false }
-      - { name: country, label: City or country, widget: string, required: false }
-      - { name: description, label: "What you do together (or grant / programme name)", widget: string, required: false }
-      - { name: year, label: Year or period (funding), widget: string, required: false, hint: "e.g. 2024 or 2023-2025" }
-      - name: projects
-        label: Linked projects
-        widget: relation
-        collection: projects
-        value_field: "{{slug}}"
-        search_fields: [title]
-        display_fields: [title]
-        multiple: true
-        required: false
-        hint: "The logo also appears on these project pages."
-      - { name: order, label: Position, widget: number, value_type: int, required: false, hint: "1 = first" }
-      - { name: hidden, label: Hide from the site, widget: boolean, default: false }
 
   # -------------------------------------------------------------------
   # REPOSITORIES (entered by hand, no GitHub API)

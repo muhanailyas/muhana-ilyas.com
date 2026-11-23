@@ -2,19 +2,18 @@
 // Teaching: courses, talks and workshops, newest first, grouped into upcoming and past.
 import Base from '../layouts/Base.astro';
 import { getCollection } from 'astro:content';
-import { fmtDate, mdInline, pageText } from '../lib/site';
+import { fmtDate, mdInline } from '../lib/site';
 
 const items = (await getCollection('teaching', (t) => !t.data.hidden)).sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
 const today = new Date();
 today.setUTCHours(0, 0, 0, 0);
 const upcoming = items.filter((t) => t.data.date >= today).reverse();
 const past = items.filter((t) => t.data.date < today);
-const text = pageText('teaching', 'Teaching', { count: items.length }, 'Courses, invited talks and workshops, mostly on clinical research methods and AI in medicine.');
 const kindLabel: Record<string, string> = { course: 'Course', talk: 'Talk', workshop: 'Workshop', lecture: 'Lecture', supervision: 'Supervision', other: '' };
 ---
-<Base title={text.title} description="Courses, talks and workshops.">
-  <h1 class="page-title">{text.title}</h1>
-  {text.intro && <p class="page-intro" set:html={text.intro} />}
+<Base title="Teaching" description="Courses, talks and workshops.">
+  <h1 class="page-title">Teaching</h1>
+  <p class="page-intro">Courses, invited talks and workshops, mostly on clinical research methods and AI in medicine.</p>
   {[{ label: 'Upcoming', list: upcoming }, { label: 'Past', list: past }].filter((g) => g.list.length).map((g) => (
     <section style="margin-bottom:2.5rem">
       <h2 class="group-title">{g.label}</h2>

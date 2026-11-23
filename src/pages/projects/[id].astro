@@ -1,10 +1,7 @@
 ---
-// Project detail page: summary, first figure, full write-up, remaining figures,
-// links, and the collaborators and funders linked to this project.
+// Project detail page: full write-up written in the admin panel's rich text editor.
 import Base from '../../layouts/Base.astro';
-import LogoGrid from '../../components/LogoGrid.astro';
 import { getCollection, render, type CollectionEntry } from 'astro:content';
-import { forProject } from '../../lib/collaborators';
 
 export async function getStaticPaths() {
   const projects = await getCollection('projects', (p) => !p.data.hidden);
@@ -14,50 +11,18 @@ const { project } = Astro.props as { project: CollectionEntry<'projects'> };
 const { Content } = await render(project);
 const d = project.data;
 const period = [d.start, d.end ?? (d.status === 'active' ? 'present' : undefined)].filter(Boolean).join(' to ');
-const [first, ...rest] = d.figures;
-const linked = await forProject(project.id);
-const partners = linked.filter((c) => c.data.kind === 'collaboration');
-const funders = linked.filter((c) => c.data.kind === 'funding');
 ---
 <Base title={d.title} description={d.summary} image={d.thumbnail ?? undefined} katex>
   <p class="eyebrow">{d.status}{period && ` · ${period}`}</p>
   <h1 class="page-title">{d.title}</h1>
   <p class="page-intro" style="margin-bottom:1.5rem">{d.summary}</p>
-
-  {first ? (
-    <figure class="fig">
-      <img src={first.image} alt={first.alt ?? first.caption ?? ''} />
-      {first.caption && <figcaption><strong>Figure 1.</strong> {first.caption}</figcaption>}
-    </figure>
-  ) : d.thumbnail && <img class="post-cover" src={d.thumbnail} alt={d.thumbnail_alt ?? ''} />}
-
+  {d.thumbnail && <img class="post-cover" src={d.thumbnail} alt={d.thumbnail_alt ?? ''} />}
   <div class="prose"><Content /></div>
-
-  {rest.map((f, i) => (
-    <figure class="fig">
-      <img src={f.image} alt={f.alt ?? f.caption ?? ''} loading="lazy" />
-      {f.caption && <figcaption><strong>Figure {i + 2}.</strong> {f.caption}</figcaption>}
-    </figure>
-  ))}
-
   {d.links.length > 0 && (
     <p class="pub-actions" style="margin-top:2rem">
-      {d.links.map((l) => <a href={l.url} target={l.url.startsWith('/') ? undefined : '_blank'} rel="noopener">{l.label}</a>)}
+      {d.links.map((l) => <a href={l.url} target="_blank" rel="noopener">{l.label}</a>)}
     </p>
   )}
   {d.tags.length > 0 && <ul class="tags">{d.tags.map((t) => <li>{t}</li>)}</ul>}
-
-  {partners.length > 0 && (
-    <section class="section">
-      <h2 class="subhead-lg">Collaborators</h2>
-      <LogoGrid items={partners} />
-    </section>
-  )}
-  {funders.length > 0 && (
-    <section class="section">
-      <h2 class="subhead-lg">Funding</h2>
-      <LogoGrid items={funders} />
-    </section>
-  )}
   <p class="section"><a href="/projects/">&larr; All projects</a></p>
 </Base>

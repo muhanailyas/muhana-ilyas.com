@@ -1,31 +1,17 @@
 ---
 // Projects: thumbnail, title, status, summary and tags; each links to its own page.
-// Below the list: collaborating institutions (Indonesia, international) and funding.
 import Base from '../../layouts/Base.astro';
-import LogoGrid from '../../components/LogoGrid.astro';
 import { getCollection } from 'astro:content';
-import { byOrder, pageText } from '../../lib/site';
-import { getCollaborators } from '../../lib/collaborators';
+import { byOrder } from '../../lib/site';
 
 const rank = { active: 0, planned: 1, paused: 2, completed: 3 } as const;
 const projects = (await getCollection('projects', (p) => !p.data.hidden)).sort(
   (a, b) => byOrder(a, b) || rank[a.data.status] - rank[b.data.status] || a.data.title.localeCompare(b.data.title)
 );
-const text = pageText('projects', 'Projects', { count: projects.length }, 'Current and past research projects.');
-const collabText = pageText('collaborations', 'Collaborations and funding', {}, 'Institutions I work with and the organisations that have supported this work.');
-
-const all = await getCollaborators();
-const partners = all.filter((c) => c.data.kind === 'collaboration');
-const indonesia = partners.filter((c) => c.data.region === 'indonesia');
-const international = partners.filter((c) => c.data.region === 'international');
-const funding = all.filter((c) => c.data.kind === 'funding');
-const projectNames = Object.fromEntries(projects.map((p) => [p.id, p.data.short_title ?? p.data.title]));
-// Which collaborators are linked to each project (shown under the project summary).
-const partnersOf = (id: string) => partners.filter((c) => c.data.projects.includes(id)).map((c) => c.data.short_name ?? c.data.name);
 ---
-<Base title={text.title} description="Research projects in clinical neuroscience and medical AI.">
-  <h1 class="page-title">{text.title}</h1>
-  {text.intro && <p class="page-intro" set:html={text.intro} />}
+<Base title="Projects" description="Research projects in clinical neuroscience and medical AI.">
+  <h1 class="page-title">Projects</h1>
+  <p class="page-intro">Current and past research projects.</p>
   <ul class="project-list">
     {projects.map((p) => (
       <li class:list={['project', { 'no-thumb': !p.data.thumbnail }]}>
@@ -38,36 +24,9 @@ const partnersOf = (id: string) => partners.filter((c) => c.data.projects.includ
           <span class="status">{p.data.status}</span>
           <h2><a href={`/projects/${p.id}/`}>{p.data.title}</a></h2>
           <p>{p.data.summary}</p>
-          {partnersOf(p.id).length > 0 && <p class="meta">With {partnersOf(p.id).join(' · ')}</p>}
           {p.data.tags.length > 0 && <ul class="tags">{p.data.tags.map((t) => <li>{t}</li>)}</ul>}
         </div>
       </li>
     ))}
   </ul>
-
-  {(partners.length > 0 || funding.length > 0) && (
-    <section class="section" id="collaborations" aria-labelledby="collab-h">
-      <h2 id="collab-h">{collabText.title}</h2>
-      {collabText.intro && <p set:html={collabText.intro} />}
-
-      {indonesia.length > 0 && (
-        <>
-          <h3 class="subhead">Indonesia</h3>
-          <LogoGrid items={indonesia} projectNames={projectNames} showProjects />
-        </>
-      )}
-      {international.length > 0 && (
-        <>
-          <h3 class="subhead">International</h3>
-          <LogoGrid items={international} projectNames={projectNames} showProjects />
-        </>
-      )}
-      {funding.length > 0 && (
-        <>
-          <h3 class="subhead">Funding and grants</h3>
-          <LogoGrid items={funding} projectNames={projectNames} showProjects />
-        </>
-      )}
-    </section>
-  )}
 </Base>
