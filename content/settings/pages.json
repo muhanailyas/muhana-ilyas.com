@@ -1,0 +1,36 @@
+{
+  "skills": {
+    "title": "Skills",
+    "intro": "asana"
+  },
+  "collaborations": {
+    "title": "",
+    "intro": ""
+  },
+  "projects": {
+    "title": "Projects",
+    "intro": ""
+  },
+  "publications": {
+    "title": "Publications",
+    "intro": ""
+  },
+  "repositories": {
+    "title": "Repositories",
+    "intro": ""
+  },
+  "teaching": {
+    "title": "Teaching",
+    "intro": ""
+  },
+  "blog": {
+    "title": "Blog",
+    "intro": ""
+  },
+  "contact": {
+    "title": "Contact"
+  },
+  "cv": {
+    "title": "CV"
+  }
+}
