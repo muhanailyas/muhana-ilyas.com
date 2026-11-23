@@ -1,7 +1,7 @@
 {
   "skills": {
     "title": "Skills",
-    "intro": "asana"
+    "intro": "A summary of what I can contribute to a research team: study design, statistical analysis, evidence synthesis, predictive modelling and research writing, drawn from clinical and computational work."
   },
   "collaborations": {
     "title": "",
@@ -9,23 +9,23 @@
   },
   "projects": {
     "title": "Projects",
-    "intro": ""
+    "intro": "Current and past research projects. Each project below has a short summary, key figures, and the institutions that collaborated on or funded it."
   },
   "publications": {
     "title": "Publications",
-    "intro": ""
+    "intro": "{count} publications, newest first. My name is in bold. Citation counts are on Google Scholar."
   },
   "repositories": {
     "title": "Repositories",
-    "intro": ""
+    "intro": "Code and data for my research projects, openly available on GitHub."
   },
   "teaching": {
     "title": "Teaching",
-    "intro": ""
+    "intro": "Courses, workshops and talks I have taught or given, mainly on clinical research methods, evidence synthesis and AI-assisted writing."
   },
   "blog": {
     "title": "Blog",
-    "intro": ""
+    "intro": "Short notes on research methods, medical AI and academic life."
   },
   "contact": {
     "title": "Contact"
