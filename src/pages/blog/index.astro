@@ -2,14 +2,15 @@
 // Blog index: posts newest first, with tags and reading time. Drafts are hidden.
 import Base from '../../layouts/Base.astro';
 import { getCollection } from 'astro:content';
-import { fmtDate, readingTime } from '../../lib/site';
+import { fmtDate, readingTime, pageText } from '../../lib/site';
 
 const posts = (await getCollection('blog', (p) => !p.data.draft)).sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+const text = pageText('blog', 'Blog', { count: posts.length }, 'Notes on clinical neuroscience, research methods and medical AI. [RSS feed](/rss.xml).');
 const tags = [...new Set(posts.flatMap((p) => p.data.tags))].sort();
 ---
-<Base title="Blog" description="Notes on clinical neuroscience, research methods and medical AI.">
-  <h1 class="page-title">Blog</h1>
-  <p class="page-intro">Notes on clinical neuroscience, research methods and medical AI. <a href="/rss.xml">RSS feed</a>.</p>
+<Base title={text.title} description="Notes on clinical neuroscience, research methods and medical AI.">
+  <h1 class="page-title">{text.title}</h1>
+  {text.intro && <p class="page-intro" set:html={text.intro} />}
   {tags.length > 0 && <ul class="tags" style="margin-bottom:2rem">{tags.map((t) => <li><a href={`/blog/tag/${encodeURIComponent(t)}/`}>{t}</a></li>)}</ul>}
   {posts.length === 0 && <p>No posts yet.</p>}
   <ul class="dated">

@@ -2,11 +2,12 @@
 // Contact: email, address, profile links and an optional Formspree form.
 import Base from '../layouts/Base.astro';
 import Email from '../components/Email.astro';
-import { SITE, CONTACT } from '../lib/site';
+import { SITE, CONTACT, pageText } from '../lib/site';
+const text = pageText('contact', 'Contact');
 const formAction = CONTACT.form_enabled && CONTACT.formspree_id ? `https://formspree.io/f/${CONTACT.formspree_id}` : null;
 ---
 <Base title="Contact" description={`How to contact ${SITE.full_name}.`}>
-  <h1 class="page-title">Contact</h1>
+  <h1 class="page-title">{text.title}</h1>
   <p class="page-intro">{CONTACT.intro}</p>
   <dl class="contact-grid">
     <dt>Email</dt><dd><Email address={CONTACT.email || SITE.email} /></dd>

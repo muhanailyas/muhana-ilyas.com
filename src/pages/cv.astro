@@ -1,11 +1,12 @@
 ---
 // CV: embedded PDF viewer plus download button. Replace the PDF in Admin > Settings > CV.
 import Base from '../layouts/Base.astro';
-import { CV, SITE, fmtDate } from '../lib/site';
+import { CV, SITE, fmtDate, pageText } from '../lib/site';
+const text = pageText('cv', 'Curriculum vitae');
 const updated = CV.updated ? fmtDate(new Date(CV.updated)) : null;
 ---
 <Base title="CV" description={`Curriculum vitae of ${SITE.full_name}.`}>
-  <h1 class="page-title">Curriculum vitae</h1>
+  <h1 class="page-title">{text.title}</h1>
   {CV.intro && <p class="page-intro" style="margin-bottom:0">{CV.intro}{updated && ` Last updated ${updated}.`}</p>}
   <p class="cv-actions">
     <a class="btn" href={CV.pdf} download>Download PDF</a>
