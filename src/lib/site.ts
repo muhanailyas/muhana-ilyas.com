@@ -2,6 +2,9 @@
 import site from '../../content/settings/site.json';
 import contact from '../../content/settings/contact.json';
 import cv from '../../content/settings/cv.json';
+// pages.json is optional: if it is missing, every page falls back to its default title and introduction.
+const pagesFound = import.meta.glob('../../content/settings/pages.json', { eager: true, import: 'default' });
+const pages: Record<string, { title?: string; intro?: string }> = (Object.values(pagesFound)[0] as any) ?? {};
 import { marked } from 'marked';
 
 export type Social = { label: string; url: string };
@@ -10,6 +13,20 @@ export type MenuItem = { label: string; href: string };
 export const SITE = site as typeof site & { socials: Social[]; menu: MenuItem[] };
 export const CONTACT = contact;
 export const CV = cv;
+
+type PageKey = 'projects' | 'skills' | 'collaborations' | 'publications' | 'repositories' | 'teaching' | 'blog' | 'contact' | 'cv';
+/**
+ * Page title and introduction, edited in Admin > Settings > Page titles and introductions.
+ * Placeholders in the introduction are filled in automatically:
+ * {count} = number of items on the page, {scholar} = your Google Scholar link, {github} = your GitHub link.
+ */
+export function pageText(key: PageKey, fallbackTitle: string, vars: Record<string, string | number> = {}, fallbackIntro = '') {
+  const p = (pages[key] ?? {}) as { title?: string; intro?: string };
+  const link = (re: RegExp) => SITE.socials.find((s) => re.test(s.label))?.url ?? '#';
+  const all: Record<string, string | number> = { scholar: link(/scholar/i), github: link(/github/i), ...vars };
+  const intro = (p.intro ?? fallbackIntro).replace(/\{(\w+)\}/g, (m, k) => (k in all ? String(all[k]) : m));
+  return { title: p.title || fallbackTitle, intro: intro ? mdInline(intro) : '' };
+}
 
 /** Render a short markdown string (bio paragraphs, news lines) to HTML. */
 export function md(text: string | undefined | null): string {

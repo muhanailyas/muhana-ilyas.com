@@ -52,6 +52,7 @@ const projects = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './content/projects' }),
   schema: z.object({
     title: z.string(),
+    short_title: opt(), // used where space is short, e.g. "APONO"
     summary: z.string(),
     thumbnail: opt(),
     thumbnail_alt: opt(),
@@ -60,6 +61,45 @@ const projects = defineCollection({
     start: opt(),
     end: opt(),
     links: z.array(z.object({ label: z.string(), url: z.string() })).nullish().transform((v) => v ?? []),
+    // Figures shown on the project page: the first appears under the summary, the rest after the text.
+    figures: z
+      .array(z.object({ image: z.string(), caption: z.string().nullish(), alt: z.string().nullish() }))
+      .nullish()
+      .transform((v) => (v ?? []).filter((f) => f.image)),
+    order: optNum(),
+    hidden: z.boolean().nullish().transform((v) => !!v),
+  }),
+});
+
+// Skills page: one card per skill, laid out like the projects list.
+const skills = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './content/skills' }),
+  schema: z.object({
+    title: z.string(),
+    summary: z.string(),
+    figure: opt(),
+    figure_alt: opt(),
+    tools: tags(),
+    links: z.array(z.object({ label: z.string(), url: z.string() })).nullish().transform((v) => v ?? []),
+    order: optNum(),
+    hidden: z.boolean().nullish().transform((v) => !!v),
+  }),
+});
+
+// Collaborating institutions and funders, shown under Projects and on each linked project page.
+const collaborators = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './content/collaborators' }),
+  schema: z.object({
+    name: z.string(),
+    short_name: opt(), // shown in the box until a logo is uploaded, e.g. UGM
+    kind: z.enum(['collaboration', 'funding']).nullish().transform((v) => v ?? 'collaboration'),
+    region: z.enum(['indonesia', 'international']).nullish().transform((v) => v ?? 'indonesia'),
+    logo: opt(),
+    url: opt(),
+    country: opt(),
+    description: opt(), // what we work on together, or the grant / programme name
+    year: opt(),
+    projects: z.array(z.string()).nullish().transform((v) => v ?? []),
     order: optNum(),
     hidden: z.boolean().nullish().transform((v) => !!v),
   }),
@@ -126,4 +166,4 @@ const atlas = defineCollection({
   }),
 });
 
-export const collections = { news, publications, projects, repositories, teaching, blog, atlas };
+export const collections = { news, publications, projects, skills, collaborators, repositories, teaching, blog, atlas };
