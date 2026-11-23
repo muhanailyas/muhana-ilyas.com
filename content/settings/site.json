@@ -67,6 +67,10 @@
       "href": "/"
     },
     {
+      "label": "Skills",
+      "href": "/skills/"
+    },
+    {
       "label": "Projects",
       "href": "/projects/"
     },
