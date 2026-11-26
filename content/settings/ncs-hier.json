@@ -1,0 +1,83 @@
+{
+  "title": "NCS-hier: nerve conduction study classifier",
+  "intro": "A web-based tool from my nerve conduction study project. Enter the values of one examination and choose a model. It answers two clinical questions first (is the study abnormal, and is it polyneuropathy?), then gives the probability of each of four conclusions, a 90% prediction set drawn on the diagnostic hierarchy, and what that set would mean for writing the report. Everything is computed in your browser; no values are sent or stored.",
+  "notice": "Research tool, not for clinical use. The models were developed on 523 examinations from one laboratory and have not yet been validated elsewhere. In validation they separated abnormal from normal studies well (AUROC 0.82 to 0.91 for the learned models in this tool) but localised the lesion only moderately, and few examinations met the error targets for automatic drafting, so a neurologist’s reading remains essential.",
+  "default_model": "lr_flat",
+  "models": [
+    {
+      "key": "lr_flat",
+      "label": "Logistic regression (baseline)",
+      "description": "The model chosen before the analysis as the baseline. It weighs each feature linearly, and the features that moved the prediction are shown.",
+      "show": true
+    },
+    {
+      "key": "lr_hier",
+      "label": "Hierarchical logistic regression",
+      "description": "Decides first whether the study is normal or abnormal, then where the lesion lies, with one logistic regression at each step.",
+      "show": true
+    },
+    {
+      "key": "lr_compact",
+      "label": "Compact logistic regression",
+      "description": "Uses 15 features only, few enough to be checked by hand.",
+      "show": true
+    },
+    {
+      "key": "ebm",
+      "label": "Explainable boosting machine",
+      "description": "An additive model that learns a curve for each feature; the contribution of each feature is shown.",
+      "show": true
+    },
+    {
+      "key": "xgb",
+      "label": "XGBoost",
+      "description": "Gradient-boosted decision trees, which can capture interactions between features.",
+      "show": true
+    },
+    {
+      "key": "xgb_hier",
+      "label": "Hierarchical XGBoost",
+      "description": "The two-step hierarchy, with gradient-boosted trees at each step.",
+      "show": true
+    },
+    {
+      "key": "nerveset_h",
+      "label": "NerveSet-H",
+      "description": "A small set transformer that reads each measurement as a token, so an untested nerve is simply absent.",
+      "show": true
+    },
+    {
+      "key": "rule_expert",
+      "label": "Textbook rules",
+      "description": "Electrodiagnostic rules from the literature, not learned from data: textbook limits (Preston & Shapiro, 2020), the median-ulnar comparison for carpal tunnel syndrome (Jablecki et al., 2002) and the length-dependent pattern of distal symmetric polyneuropathy (England et al., 2005). It gives one class without probabilities.",
+      "show": true
+    }
+  ],
+  "missing_data": "Leave untested nerves empty. Each model handles a missing value the way it was trained to: the logistic regressions use the typical value of the development data, XGBoost and the explainable boosting machine follow the branch or bin learned for missing values, and NerveSet-H leaves the untested nerve out. Values outside the plausible range are ignored and listed under the result. The fewer values are entered, the more the result rests on typical values.",
+  "collaboration_title": "Collaborate on external validation",
+  "collaboration": "These models were developed in one laboratory (Universitas Sebelas Maret Hospital, Indonesia) and have not yet been validated elsewhere. External validation is the next step, and we are looking for partner laboratories.\n\n**Who could join.** Electrodiagnostic laboratories that record routine motor and sensory nerve conduction studies of the upper or lower limbs in adults, with a written conclusion by a neurologist or clinical neurophysiologist. Laboratories with other equipment, protocols, reference limits or populations are especially welcome, for example teaching hospitals elsewhere in Indonesia and Southeast Asia, and centres abroad.\n\n**What it involves.**\n\n1. Each site obtains its own ethics approval.\n2. Routine values and the conclusion category are extracted and de-identified at the site in the data format described in the open code (a synthetic example is included).\n3. The open code runs at the site and returns only aggregate results: discrimination for the two clinical questions and the four conclusions, calibration, and coverage of the prediction sets. No patient data leave the institution.\n4. Optionally, the models are recalibrated to the local laboratory and the results are reported together.\n\n**What partners receive.** Their site-specific results, support to run the tool locally, and co-authorship of the external validation report.",
+  "collaboration_link_label": "Get in touch",
+  "collaboration_link_url": "/contact/",
+  "how_it_works": "1. **Features.** The values are summarised as they were in the study: the worse and the better side of each measure, side-to-side differences, median-ulnar comparisons, and the share of values beyond textbook limits in each limb.\n2. **Two clinical questions.** Each model gives a probability for each of four conclusions. The probability that the study is abnormal and the probability of polyneuropathy are sums of these four, so the binary answers and the four-class answer always agree.\n3. **Prediction set.** Class-conditional conformal prediction turns the probabilities into a set of conclusions that contained the neurologist’s conclusion in about 90% of examinations within each conclusion. The set is read along the diagnostic hierarchy: one conclusion could be reported; several abnormal conclusions mean the study is abnormal but the lesion still needs to be localised; a set that includes normal and abnormal conclusions goes to a neurologist.\n4. **Automatic draft.** A stricter threshold marks the examinations whose conclusion could be drafted automatically while keeping the upper 95% confidence bound of the error at or below a chosen target. With the current data, none of the models in this tool has a drafting threshold at the 5% target, and only the explainable boosting machine has one at the 10% target.\n\nThe browser code was checked against the analysis code on every examination used to build the models. The method and its validation are described in a manuscript submitted for publication.",
+  "texts": {
+    "binary_heading": "Two clinical questions",
+    "binary_abnormal": "Is the study abnormal?",
+    "binary_pnp": "Is it polyneuropathy?",
+    "binary_auroc": "validated AUROC {auroc}",
+    "binary_note": "Both answers are sums of the four probabilities below, so the two views always agree. The AUROC shows how well the model ranked examinations with the condition above those without in validation (0.5 is chance, 1 is perfect).",
+    "multiclass_heading": "Where is the lesion? Four conclusions",
+    "diagram_caption": "Filled boxes are the conclusions in the 90% prediction set. A thick outline on Abnormal means that every conclusion in the set is abnormal.",
+    "set_heading": "What the prediction set means",
+    "report": "The 90% prediction set holds one conclusion, so this conclusion could be reported after review.",
+    "abnormal_uncertain": "The 90% prediction set holds {classes} but not normal. The study looks abnormal, but the model cannot say where the lesion lies; localise it with the clinical picture or further tests.",
+    "refer": "The 90% prediction set holds {classes}. Because it includes normal as well as abnormal conclusions, the model cannot narrow the conclusion enough, and a neurologist should read the study.",
+    "refer_empty": "The 90% prediction set is empty, so the model cannot narrow the conclusion, and a neurologist should read the study.",
+    "coverage": "How to read the 90% set: it is built so that, for examinations like those used to develop the model, it contains the neurologist's conclusion in about 90% of cases within each of the four conclusions. Every development examination had a conclusion from a neurologist. In validation the set contained that conclusion for {coverage} of examinations ({cov_min} to {cov_max} across the four conclusions) and missed it for {miss}. Coverage lies slightly above 90% because, with a finite sample, the method rounds towards the safe side.",
+    "draft_heading": "Automatic draft",
+    "draft_intro": "A conclusion is offered for automatic drafting, to be checked by a neurologist, only when the prediction set holds that conclusion alone and its probability is above a threshold. The threshold was chosen in validation so that the upper 95% confidence bound of the drafting error stayed at or below the error target.",
+    "draft_not_offered": "Not offered for this model at the {targets} error target. In validation no probability threshold kept the upper 95% confidence bound of the drafting error at or below the target: too few examinations were both confident enough and correct often enough. This reflects the data and the model, not a fault of the tool.",
+    "perf_heading": "Validated performance of the models in this tool",
+    "perf_note": "Repeated patient-grouped nested cross-validation on the development data (523 examinations, one laboratory); not yet confirmed in other laboratories. AUROC: 0.5 is chance, 1 is perfect. Macro: averaged over the four conclusions.",
+    "limits_note": "Abnormal if: adult limits from Preston and Shapiro (2020), Electromyography and Neuromuscular Disorders, 4th edition. They are used only to flag values and to count abnormal values; the models learn their own boundaries from the data. Limits depend on age, height, temperature and laboratory."
+  }
+}

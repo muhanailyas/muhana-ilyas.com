@@ -190,6 +190,68 @@ collections:
           - { name: updated, label: Last updated, widget: datetime, time_format: false, date_format: "YYYY-MM-DD", format: "YYYY-MM-DD" }
           - { name: intro, label: Text above the viewer, widget: text, required: false }
 
+      - name: ncs_hier
+        label: NCS-hier page (web tool)
+        file: content/settings/ncs-hier.json
+        fields:
+          - { name: title, label: Page title, widget: string }
+          - { name: intro, label: Introduction under the title, widget: text, required: false, hint: "Markdown links allowed." }
+          - { name: notice, label: Notice above the tool, widget: text, required: false, hint: "Optional, for example a disclaimer. Leave empty to show nothing." }
+          - name: default_model
+            label: Model shown first
+            widget: select
+            options:
+              - { label: "Logistic regression (baseline)", value: lr_flat }
+              - { label: "Hierarchical logistic regression", value: lr_hier }
+              - { label: "Compact logistic regression", value: lr_compact }
+              - { label: "Explainable boosting machine", value: ebm }
+              - { label: "XGBoost", value: xgb }
+              - { label: "Hierarchical XGBoost", value: xgb_hier }
+              - { label: "NerveSet-H", value: nerveset_h }
+              - { label: "Textbook rules", value: rule_expert }
+          - name: models
+            label: Models in the menu
+            widget: list
+            allow_add: false
+            hint: "Drag to change the order in the menu. Untick Show to hide a model."
+            summary: "{{fields.label}}"
+            fields:
+              - { name: key, label: Model code (do not change), widget: string }
+              - { name: label, label: Name in the menu, widget: string }
+              - { name: description, label: Description under the menu, widget: text, required: false }
+              - { name: show, label: Show, widget: boolean, default: true }
+          - { name: missing_data, label: "Incomplete examinations (text under About the model)", widget: text, required: false, hint: "How the tool handles nerves that were not tested. Leave empty to use the built-in text." }
+          - { name: collaboration_title, label: Collaboration heading, widget: string, required: false }
+          - { name: collaboration, label: "Collaboration text (below the tool)", widget: markdown, required: false, buttons: [bold, italic, link, numbered-list, bulleted-list], editor_components: [], hint: "Invitation to external validation: who could join, what it involves, what partners receive. Leave empty to hide the section." }
+          - { name: collaboration_link_label, label: Collaboration link text, widget: string, required: false }
+          - { name: collaboration_link_url, label: "Collaboration link (for example /contact/ or mailto:...)", widget: string, required: false }
+          - { name: how_it_works, label: How it works (below the tool), widget: markdown, required: false, buttons: [bold, italic, link, numbered-list, bulleted-list], editor_components: [] }
+          - name: texts
+            label: Texts in the tool
+            widget: object
+            collapsed: true
+            hint: "Wording of the result. Words in curly brackets, such as {coverage}, are filled in by the tool: keep them. Leave a field empty to use the built-in text."
+            fields:
+              - { name: binary_heading, label: "Heading: two clinical questions", widget: string, required: false }
+              - { name: binary_abnormal, label: "Question 1 (abnormal study)", widget: string, required: false }
+              - { name: binary_pnp, label: "Question 2 (polyneuropathy)", widget: string, required: false }
+              - { name: binary_auroc, label: "AUROC label under each question ({auroc} is filled in)", widget: string, required: false }
+              - { name: binary_note, label: "Note under the two questions", widget: text, required: false }
+              - { name: multiclass_heading, label: "Heading: four conclusions", widget: string, required: false }
+              - { name: diagram_caption, label: "Caption under the hierarchy diagram", widget: text, required: false }
+              - { name: set_heading, label: "Heading: what the prediction set means", widget: string, required: false }
+              - { name: report, label: "Decision text: one conclusion in the set", widget: text, required: false }
+              - { name: abnormal_uncertain, label: "Decision text: abnormal, localisation uncertain ({classes} is filled in)", widget: text, required: false }
+              - { name: refer, label: "Decision text: refer ({classes} is filled in)", widget: text, required: false }
+              - { name: refer_empty, label: "Decision text: empty set", widget: text, required: false }
+              - { name: coverage, label: "How to read the 90% set ({coverage}, {miss}, {cov_min}, {cov_max} are filled in)", widget: text, required: false }
+              - { name: draft_heading, label: "Heading: automatic draft", widget: string, required: false }
+              - { name: draft_intro, label: "Automatic draft: explanation", widget: text, required: false }
+              - { name: draft_not_offered, label: "Automatic draft: not offered ({targets} is filled in)", widget: text, required: false }
+              - { name: perf_heading, label: "Heading: validated performance of all models", widget: string, required: false }
+              - { name: perf_note, label: "Note under the performance table", widget: text, required: false }
+              - { name: limits_note, label: "Note on the 'Abnormal if' limits and their source", widget: text, required: false }
+
       - name: atlas
         label: Atlas page (APONO)
         file: content/atlas/atlas.md

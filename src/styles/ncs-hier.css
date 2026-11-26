@@ -1,0 +1,137 @@
+/* NCS classifier: styles scoped to .ncsc. Uses the website's colour tokens when present
+   (--text, --muted, --link, --teal, --rule, --bg), with fallbacks for the standalone file. */
+.ncsc { --c-text: var(--text, #000); --c-muted: var(--muted, #6b6b6b); --c-teal: var(--teal, #032f3c); --c-rule: var(--rule, rgba(0,0,0,.1));
+  --c-bg: var(--bg, #fff); --c-track: var(--rule, rgba(0,0,0,.08)); --c-down: #9a9a9a; }
+:root[data-theme='dark'] .ncsc { --c-down: #7d7d7d; }
+.ncsc-grid { display: block; }
+.ncsc-model { margin: 1.75rem 0 1.75rem; }
+.ncsc-model label { display: inline-flex; align-items: baseline; gap: 0.75rem; font-size: 1.1rem; }
+.ncsc-model select { font-size: 1rem; min-width: 18rem; }
+.ncsc-model-desc { color: var(--c-muted); font-size: 0.95rem; margin-top: 0.4rem; }
+.ncsc-muted { color: var(--c-muted); font-size: 0.9rem; }
+.ncsc-compare { width: 100%; border-collapse: collapse; font-size: 0.95rem; margin-bottom: 0.5rem; }
+.ncsc-compare th, .ncsc-compare td { text-align: left; font-weight: 300; padding: 0.35rem 0.75rem 0.35rem 0; border-bottom: 1px solid var(--c-rule); vertical-align: top; }
+.ncsc-compare thead th { font-size: 0.8rem; color: var(--c-muted); font-weight: 400; }
+.ncsc-btn { display: inline-block; background: none; cursor: pointer; font: inherit; font-size: 0.64rem; font-weight: 400; letter-spacing: 0.02em;
+  text-transform: uppercase; line-height: 1.5; color: var(--c-text); border: 1px solid var(--c-text); border-radius: 2px; padding: 0.25rem 0.75rem; }
+.ncsc-btn:hover, .ncsc-btn:focus-visible { color: var(--link, #ca3737); border-color: var(--link, #ca3737); }
+.ncsc fieldset { border: 0; padding: 0; margin: 0 0 2rem; min-width: 0; }
+.ncsc legend { font-size: 1.5rem; font-weight: 300; padding: 0; margin-bottom: 0.75rem; }
+.ncsc-patient { display: flex; flex-wrap: wrap; gap: 0.75rem 2rem; }
+.ncsc-patient legend { width: 100%; }
+.ncsc-patient label { display: grid; gap: 0.2rem; font-size: 0.95rem; }
+.ncsc input, .ncsc select { font: inherit; font-weight: 300; color: var(--c-text); background: transparent; border: 0; border-bottom: 1px solid var(--c-muted);
+  border-radius: 0; padding: 0.2rem 0; }
+.ncsc input:focus, .ncsc select:focus { outline: none; border-bottom-color: var(--link, #ca3737); }
+.ncsc-patient input { width: 6rem; }
+.ncsc-patient select { width: 8rem; }
+.ncsc input[type=number] { -moz-appearance: textfield; appearance: textfield; }
+.ncsc input::-webkit-outer-spin-button, .ncsc input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.ncsc input:disabled { border-bottom-style: dotted; opacity: 0.6; }
+.ncsc input.abn { font-weight: 600; }
+.ncsc-unit { color: var(--c-muted); font-size: 0.85em; font-weight: 300; }
+.ncsc-table { width: 100%; border-collapse: collapse; }
+.ncsc-table th, .ncsc-table td { text-align: left; font-weight: 300; padding: 0.3rem 0.6rem 0.3rem 0; vertical-align: middle; }
+.ncsc-table thead th { font-size: 0.8rem; color: var(--c-muted); font-weight: 400; border-bottom: 1px solid var(--c-rule); }
+.ncsc-group th { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--c-muted); font-weight: 400; padding-top: 0.9rem; }
+.ncsc-cell { display: inline-flex; align-items: center; gap: 0.3rem; }
+.ncsc-cell input { width: 4.2rem; }
+.ncsc-nr { background: none; border: 1px solid var(--c-rule); border-radius: 2px; font: inherit; font-size: 0.6rem; font-weight: 400; color: var(--c-muted);
+  padding: 0.05rem 0.3rem; cursor: pointer; letter-spacing: 0.03em; }
+.ncsc-nr[aria-pressed='true'] { background: var(--c-teal); border-color: var(--c-teal); color: #fff; }
+.ncsc-flag { font-size: 0.7rem; color: var(--c-teal); font-weight: 600; min-width: 1.6rem; }
+:root[data-theme='dark'] .ncsc-flag { color: #7fc4d6; }
+.ncsc-lim { color: var(--c-muted); font-size: 0.85rem; white-space: nowrap; }
+.ncsc-hint { color: var(--c-muted); font-size: 0.9rem; margin-top: -1rem; }
+.ncsc-h2 { font-size: 2rem; font-weight: 300; margin: 0 0 1rem; }
+.ncsc-h3 { font-size: 1.1rem; font-weight: 400; margin: 1.75rem 0 0.5rem; }
+.ncsc-result { margin-top: 2.5rem; }
+.ncsc-empty { color: var(--c-muted); }
+.ncsc-decision { font-size: 1.6rem; line-height: 1.3; margin-bottom: 0.4rem; }
+.ncsc-bars, .ncsc-contrib, .ncsc-list { list-style: none; padding: 0; margin: 0; }
+.ncsc-bars li { display: grid; grid-template-columns: minmax(9rem, 14rem) minmax(0, 1fr) 3rem 3.2rem; gap: 0.75rem; align-items: center; padding: 0.3rem 0; }
+.ncsc-track { height: 8px; background: var(--c-track); border-radius: 4px; overflow: hidden; }
+.ncsc-fill { display: block; height: 100%; background: var(--c-teal); border-radius: 0 4px 4px 0; opacity: 0.45; }
+.ncsc-bars li.in .ncsc-fill { opacity: 1; }
+:root[data-theme='dark'] .ncsc-fill { background: #4fa3ba; }
+.ncsc-val { text-align: right; font-variant-numeric: tabular-nums; font-weight: 400; }
+.ncsc-tag { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--c-muted); white-space: nowrap; }
+.ncsc-binary { display: flex; flex-wrap: wrap; gap: 0.5rem 2rem; margin-top: 0.75rem; }
+.ncsc-binary strong { font-weight: 600; font-variant-numeric: tabular-nums; margin-left: 0.3rem; }
+.ncsc-list li { margin: 0 0 0.35rem; padding-left: 1rem; text-indent: -1rem; }
+.ncsc-list li::before { content: '–'; display: inline-block; width: 1rem; text-indent: 0; color: var(--c-muted); }
+.ncsc-contrib li { display: grid; grid-template-columns: minmax(0, 1fr) 9rem 4rem; gap: 0.75rem; align-items: center; padding: 0.25rem 0; font-size: 0.95rem; }
+.ncsc-c-track { position: relative; height: 8px; }
+.ncsc-c-track::before { content: ''; position: absolute; left: 50%; top: -3px; bottom: -3px; width: 1px; background: var(--c-muted); opacity: 0.6; }
+.ncsc-c-fill { position: absolute; top: 0; height: 100%; }
+.ncsc-c-fill.up { left: 50%; background: var(--c-teal); border-radius: 0 4px 4px 0; }
+.ncsc-c-fill.down { right: 50%; background: var(--c-down); border-radius: 4px 0 0 4px; }
+:root[data-theme='dark'] .ncsc-c-fill.up { background: #4fa3ba; }
+.ncsc-c-dir { color: var(--c-muted); font-size: 0.85rem; }
+.ncsc-actions { margin-top: 1.5rem; display: flex; align-items: center; gap: 1rem; }
+.ncsc-copied { color: var(--c-muted); font-size: 0.85rem; }
+.ncsc-about { margin-top: 3rem; }
+.ncsc-missing { max-width: 42rem; }
+.ncsc-collab { margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--c-rule); }
+.ncsc-collab p { max-width: 42rem; }
+.ncsc-card { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
+.ncsc-card th, .ncsc-card td { text-align: left; vertical-align: top; padding: 0.5rem 1rem 0.5rem 0; border-bottom: 1px solid var(--c-rule); }
+.ncsc-card th { font-weight: 400; width: 11rem; }
+@media (max-width: 640px) {
+  .ncsc-lim { display: none; }
+  .ncsc-cell input { width: 3.6rem; }
+  .ncsc-bars li { grid-template-columns: minmax(0, 1fr) 4.5rem 2.6rem 2.8rem; gap: 0.5rem; }
+  .ncsc-contrib li { grid-template-columns: minmax(0, 1fr) 5rem; }
+  .ncsc-c-dir { display: none; }
+  .ncsc-card th { width: 7rem; }
+  .ncsc-model select { min-width: 0; width: 100%; }
+  .ncsc-model label { display: grid; gap: 0.3rem; width: 100%; }
+}
+/* Figure mode (standalone file, ?figure=1): form and result side by side for the paper figure. */
+.ncsc.figure .ncsc-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 3rem; }
+.ncsc.figure .ncsc-result { margin-top: 1.5rem; }
+.ncsc.figure .ncsc-about, .ncsc.figure .ncsc-collab, .ncsc.figure .ncsc-actions, .ncsc.figure .ncsc-hint, .ncsc.figure .ncsc-limb.empty, .ncsc.figure .ncsc-model-desc { display: none; }
+.ncsc.figure .ncsc-model { margin: 0.5rem 0 0.5rem; }
+.ncsc.figure .ncsc-table th, .ncsc.figure .ncsc-table td { padding-top: 0.08rem; padding-bottom: 0.08rem; }
+.ncsc.figure .ncsc-group th { padding-top: 0.45rem; }
+.ncsc.figure input { padding-top: 0; padding-bottom: 0; }
+.ncsc.figure .ncsc-limb { margin-top: 0.6rem; }
+/* Two clinical questions (binary tasks), shown first */
+.ncsc-bin { list-style: none; padding: 0; margin: 0; }
+.ncsc-bin li { display: grid; grid-template-columns: minmax(9rem, 14rem) minmax(0, 1fr) 3rem; grid-template-areas: "q bar val" ". auc auc"; gap: 0.1rem 0.75rem; align-items: center; padding: 0.35rem 0; }
+.ncsc-bin.rule li { grid-template-columns: minmax(9rem, 14rem) 3rem minmax(0, 1fr); grid-template-areas: "q val auc"; }
+.ncsc-bin-q { grid-area: q; }
+.ncsc-bin .ncsc-track { grid-area: bar; }
+.ncsc-bin .ncsc-fill { opacity: 1; }
+.ncsc-bin .ncsc-val { grid-area: val; font-weight: 600; }
+.ncsc-auc { grid-area: auc; color: var(--c-muted); font-size: 0.8rem; }
+.ncsc-bin-note, .ncsc-diagram-cap, .ncsc-cov { margin-top: 0.5rem; }
+/* Hierarchy of the conclusions, with the prediction set filled */
+.ncsc-hier { display: block; width: 100%; max-width: 40rem; height: auto; margin: 0.25rem 0 0.75rem; font-family: inherit; }
+.ncsc-hier .ncsc-edge { fill: none; stroke: var(--c-muted); stroke-width: 1; opacity: 0.7; }
+.ncsc-hier .ncsc-node rect { fill: var(--c-bg); stroke: var(--c-muted); stroke-width: 1; }
+.ncsc-hier .ncsc-node text { fill: var(--c-text); font-size: 12.5px; font-weight: 300; }
+.ncsc-hier .ncsc-node text.p { font-weight: 600; font-variant-numeric: tabular-nums; }
+.ncsc-hier .ncsc-node.root rect { stroke-dasharray: 3 3; }
+.ncsc-hier .ncsc-node.in rect { fill: var(--c-teal); stroke: var(--c-teal); }
+.ncsc-hier .ncsc-node.in text { fill: #fff; }
+.ncsc-hier .ncsc-node.parent-in rect { stroke: var(--c-teal); stroke-width: 3; }
+:root[data-theme='dark'] .ncsc-hier .ncsc-node.in rect { fill: #4fa3ba; stroke: #4fa3ba; }
+:root[data-theme='dark'] .ncsc-hier .ncsc-node.in text { fill: #001a22; }
+:root[data-theme='dark'] .ncsc-hier .ncsc-node.parent-in rect { stroke: #4fa3ba; }
+.ncsc-set { border-left: 2px solid var(--c-teal); padding-left: 0.9rem; }
+:root[data-theme='dark'] .ncsc-set { border-left-color: #4fa3ba; }
+.ncsc-limits-note { margin-top: 0.4rem; }
+@media (max-width: 640px) {
+  .ncsc-bin li { grid-template-columns: minmax(0, 1fr) 4.5rem 2.8rem; }
+  .ncsc-bin.rule li { grid-template-columns: minmax(0, 1fr) 2.8rem; grid-template-areas: "q val" "auc auc"; }
+}
+.ncsc.figure .ncsc-limits-note, .ncsc.figure .ncsc-bin-note, .ncsc.figure .ncsc-cov, .ncsc.figure .ncsc-draft-intro { display: none; }
+.ncsc.figure .ncsc-h3 { margin-top: 1.1rem; }
+/* Validated performance of all models in the tool */
+.ncsc-scroll { overflow-x: auto; }
+.ncsc-perf td { font-variant-numeric: tabular-nums; }
+.ncsc-perf tr.cur th, .ncsc-perf tr.cur td { font-weight: 600; }
+.ncsc-hier.narrow { display: none; max-width: 24rem; }
+.ncsc-hier.narrow .ncsc-node text { font-size: 14px; }
+@media (max-width: 640px) { .ncsc-hier.wide { display: none; } .ncsc-hier.narrow { display: block; } }

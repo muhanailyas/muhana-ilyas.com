@@ -1,0 +1,75 @@
+---
+// NCS classifier: web-based decision support tool with the models from the NCS project.
+// Texts (title, introduction, notice, model names and descriptions, incomplete examinations, the wording of the result under
+// "Texts in the tool", collaboration, "How it works") are edited in
+// Admin > Settings > NCS-hier page (content/settings/ncs-hier.json).
+// Models are the files in public/uploads/files/ncs-hier/models/ (index.json plus one file per model),
+// written by ncshier.export in the ncs-hier code. To update them, replace that folder; nothing else changes.
+// While the models are demonstrations (trained on synthetic data), search engines are asked not to index the page.
+import fs from 'node:fs';
+import path from 'node:path';
+import Base from '../../layouts/Base.astro';
+import { md, mdInline } from '../../lib/site';
+import settings from '../../../content/settings/ncs-hier.json';
+import '../../styles/ncs-hier.css';
+
+const MODELS = '/uploads/files/ncs-hier/models';
+let demo = true;
+try {
+  demo = !!JSON.parse(fs.readFileSync(path.join(process.cwd(), 'public', MODELS, 'index.json'), 'utf8')).demo;
+} catch {}
+const s = settings as { title?: string; intro?: string; notice?: string; how_it_works?: string; default_model?: string;
+  models?: { key: string; label?: string; description?: string; show?: boolean }[]; missing_data?: string; texts?: Record<string, string>;
+  collaboration_title?: string; collaboration?: string; collaboration_link_label?: string; collaboration_link_url?: string };
+// the collaboration invitation is rendered at the bottom of this page (below "How it works"), not inside the tool
+const clientSettings = JSON.stringify({ default_model: s.default_model, models: s.models || [], missing_data: s.missing_data, texts: s.texts || {} });
+---
+<Base title={s.title || 'NCS classifier'} description="Web-based research tool for routine nerve conduction study values: is the study abnormal, is it polyneuropathy, and which of four conclusions (normal, focal neuropathy, radiculopathy or plexopathy, polyneuropathy), with a choice of models and conformal prediction sets." noindex={demo}>
+  <h1 class="page-title">{s.title || 'NCS classifier'}</h1>
+  {s.intro && <p class="page-intro" set:html={mdInline(s.intro)} />}
+  {s.notice && <p class="ncsc-page-notice" set:html={mdInline(s.notice)} />}
+
+  <div id="ncsc" class="ncsc" data-models={MODELS} data-settings={clientSettings}>
+    <p class="meta">Loading the models…</p>
+    <noscript><p>This tool runs in the browser and needs JavaScript.</p></noscript>
+  </div>
+
+  {s.how_it_works && (
+    <section class="section prose" aria-labelledby="how-h">
+      <h2 id="how-h">How it works</h2>
+      <Fragment set:html={md(s.how_it_works)} />
+    </section>
+  )}
+
+  {s.collaboration && (
+    <section class="section ncsc-collab-page" aria-labelledby="collab-h">
+      <h2 id="collab-h">{s.collaboration_title || 'Collaborate on external validation'}</h2>
+      <Fragment set:html={md(s.collaboration)} />
+      {s.collaboration_link_url && <p><a href={s.collaboration_link_url}>{s.collaboration_link_label || 'Get in touch'}</a></p>}
+    </section>
+  )}
+
+  <p class="section"><a href="/projects/ncs-multimodal-ml/">&larr; NCS project</a> &nbsp;·&nbsp; <a href="/projects/">All projects</a></p>
+</Base>
+
+<style>
+  .ncsc-page-notice { border-left: 2px solid var(--teal); padding: 0.1rem 0 0.1rem 0.9rem; margin: 1rem 0 0; font-size: 0.95rem; }
+  .ncsc-collab-page p, .ncsc-collab-page ol, .ncsc-collab-page ul { max-width: 42rem; }
+</style>
+
+<script>
+  import { mount } from '../../lib/ncs/ncs_ui.mjs';
+  const root = document.getElementById('ncsc') as HTMLElement;
+  const base = root.dataset.models as string;
+  const settings = JSON.parse(root.dataset.settings || '{}');
+  fetch(`${base}/index.json`)
+    .then((r) => (r.ok ? r.json() : Promise.reject(new Error(String(r.status)))))
+    .then((index) => mount(root, {
+      index, settings,
+      loadModel: (key: string) => {
+        const m = index.models.find((x: { key: string }) => x.key === key);
+        return fetch(`${base}/${m.file}`).then((r) => r.json());
+      },
+    }))
+    .catch(() => { root.innerHTML = '<p>The models could not be loaded. Please try again later.</p>'; });
+</script>

@@ -13,6 +13,9 @@ figures:
   - image: /uploads/figures/ncs-measurements.svg
     caption: "What the main measurements mean. Latency is the time from stimulus to response, amplitude reflects the number of conducting axons, and conduction velocity, calculated from two stimulation sites, reflects myelin function."
     alt: "Two schematic motor responses after distal and proximal stimulation, with latency, amplitude and conduction velocity explained"
+links:
+  - label: NCS-hier (web tool)
+    url: /projects/ncs-hier/
 order: 3
 ---
 
@@ -34,3 +37,5 @@ Interpreting NCS takes training and experience, and many hospitals have few clin
 ## Status
 
 Master's thesis in Artificial Intelligence at Universitas Gadjah Mada, carried out with clinical neurophysiology colleagues. A scoping review of AI applications in nerve conduction studies is being prepared alongside the main study.
+
+A related study uses only the measurements of routine upper- and lower-limb examinations. It asks two clinical questions (is the study abnormal, and is it polyneuropathy?), localises the conclusion in a two-level hierarchy (normal or abnormal, then where the lesion lies), checks how much of the apparent accuracy comes from which tests were ordered, and expresses uncertainty as prediction sets. Its models run in the browser as a [web-based decision support tool](/projects/ncs-hier/), and laboratories interested in external validation are welcome to get in touch.
